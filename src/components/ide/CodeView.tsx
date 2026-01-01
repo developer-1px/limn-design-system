@@ -74,9 +74,9 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
           <span className="w-10 text-right text-text-faint select-none">6</span>
           <span className="text-text-secondary pl-3">
             <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span style={{ color: 'var(--code-function)' }}>createUser</span>
+            <span className="code-function-highlight" style={{ color: 'var(--code-variable)' }}>createUser</span>
             <span className="text-text-tertiary">(</span>
-            <span style={{ color: 'var(--code-variable)' }}>data</span>
+            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>data</span>
             <span className="text-text-tertiary">:</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>Partial</span>
             <span className="text-text-tertiary">{'<'}</span>
@@ -100,14 +100,14 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
           <span className="w-10 text-right text-text-faint select-none">7</span>
           <span className="pl-6">
             <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>user</span>{' '}
+            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>user</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
             <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>db</span>
+            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>create</span>
+            <span className="code-function-highlight" style={{ color: 'var(--code-variable)' }}>create</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-punctuation)' }}>{'{ '}</span>
             <span style={{ color: 'var(--code-property)' }}>data</span>

@@ -70,7 +70,7 @@ export default function IDELayout() {
         </ActivityBar>
 
         {/* Sidebar */}
-        <Sidebar title="EXPLORER">
+        <Sidebar title="PROJECT">
           <div onContextMenu={(e) => {
             e.preventDefault()
             setContextMenu({ x: e.clientX, y: e.clientY })

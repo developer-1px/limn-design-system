@@ -35,13 +35,8 @@ const typeLabels = {
   snippet: '⋯',
 }
 
-export function Autocomplete({
-  items,
-  position,
-  selectedIndex,
-  onSelect,
-  onClose,
-}: AutocompleteProps) {
+export function Autocomplete(props: AutocompleteProps) {
+  const { items, position, selectedIndex, onSelect, onClose } = props
   const menuRef = React.useRef<HTMLDivElement>(null)
 
   React.useEffect(() => {

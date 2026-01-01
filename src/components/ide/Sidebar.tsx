@@ -20,7 +20,7 @@ const FileTreeItem = React.forwardRef<HTMLDivElement, FileTreeItemProps>(
       <div
         ref={ref}
         className={cn(
-          'group flex h-[var(--limn-file-item-height)] items-center gap-1 border-l-2 px-2 text-xs transition-all duration-normal cursor-pointer',
+          'group flex flex-nowrap h-[var(--limn-file-item-height)] items-center gap-1 border-l-2 px-2 text-xs transition-all duration-normal cursor-pointer',
           active
             ? 'border-warm-300 bg-warm-glow/50 text-text-primary'
             : 'border-transparent text-text-secondary hover:bg-white/5'
@@ -45,8 +45,8 @@ const FileTreeItem = React.forwardRef<HTMLDivElement, FileTreeItemProps>(
             isFolder ? 'text-text-tertiary' : 'text-text-muted'
           )}
         />
-        <span className="flex-1 truncate">{label}</span>
-        {dirty && <Indicator variant="warning" className="h-1 w-1" />}
+        <span className="flex-1 truncate whitespace-nowrap overflow-hidden text-ellipsis min-w-0">{label}</span>
+        {dirty && <Indicator variant="warning" className="h-1 w-1 shrink-0" />}
       </div>
     )
   }

@@ -1,27 +1,65 @@
+import { useState } from 'react'
 import { TitleBar } from '@/components/ide/TitleBar'
 import { ActivityBar, ActivityBarItem } from '@/components/ide/ActivityBar'
 import { StatusBar } from '@/components/ide/StatusBar'
 import { TabBar, Tab } from '@/components/ide/TabBar'
 import { Sidebar, FileTreeItem } from '@/components/ide/Sidebar'
+import { SettingsPanel } from '@/components/ide/SettingsPanel'
+import { QuickActionsDialog } from '@/components/ide/QuickActionsDialog'
+import { SearchPanel } from '@/components/ide/SearchPanel'
+import { ExtensionsPanel } from '@/components/ide/ExtensionsPanel'
+import { GitPanel } from '@/components/ide/GitPanel'
+import { TerminalPanel } from '@/components/ide/TerminalPanel'
+import { NotificationCenter } from '@/components/ide/NotificationCenter'
 import { Button } from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { Indicator } from '@/components/ui/Indicator'
-import { Files, Search, GitBranch, Sparkles, Settings, FileCode, Folder } from 'lucide-react'
+import { useToast } from '@/components/ui/Toast'
+import {
+  Files,
+  Search,
+  GitBranch,
+  Sparkles,
+  Settings,
+  FileCode,
+  Folder,
+  Command,
+  Package,
+  Terminal,
+} from 'lucide-react'
 
 export default function Components() {
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [quickActionsOpen, setQuickActionsOpen] = useState(false)
+  const { addToast } = useToast()
+
+  const showToastExample = (type: 'success' | 'warning' | 'error' | 'info') => {
+    const messages = {
+      success: { title: 'Success!', description: 'Your changes have been saved.' },
+      warning: { title: 'Warning', description: 'Please review your settings.' },
+      error: { title: 'Error', description: 'Something went wrong.' },
+      info: { title: 'Info', description: 'New update available.' },
+    }
+    addToast({ type, ...messages[type] })
+  }
+
   return (
     <div className="min-h-screen bg-bg-deep p-12 pl-20 pt-12">
       <div className="mx-auto max-w-7xl space-y-12">
-        <div>
-          <h1 className="text-2xl font-medium text-text-primary mb-2">Component Library</h1>
-          <p className="text-text-tertiary">All LIMN design system components</p>
+        {/* Header */}
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-medium text-text-primary mb-2">Component Library</h1>
+            <p className="text-text-tertiary">All LIMN design system components</p>
+          </div>
+          <NotificationCenter />
         </div>
 
-        {/* IDE Components */}
+        {/* IDE Shell Components */}
         <section className="space-y-6">
-          <h2 className="text-xl font-medium text-text-primary">IDE Components</h2>
+          <h2 className="text-xl font-medium text-text-primary">IDE Shell Components</h2>
 
           {/* TitleBar */}
           <div className="space-y-3">
@@ -65,16 +103,93 @@ export default function Components() {
               </TabBar>
             </div>
           </div>
+        </section>
+
+        {/* IDE Panel Components */}
+        <section className="space-y-6">
+          <h2 className="text-xl font-medium text-text-primary">IDE Panel Components</h2>
 
           {/* Sidebar */}
           <div className="space-y-3">
-            <h3 className="label">Sidebar</h3>
+            <h3 className="label">File Explorer Sidebar</h3>
             <div className="rounded-[var(--limn-radius-lg)] border border-border-light overflow-hidden inline-flex">
               <Sidebar title="EXPLORER">
                 <FileTreeItem icon={Folder} label="src" isFolder isOpen />
                 <FileTreeItem icon={FileCode} label="index.ts" active indent={1} />
                 <FileTreeItem icon={FileCode} label="utils.ts" dirty indent={1} />
               </Sidebar>
+            </div>
+          </div>
+
+          {/* SearchPanel */}
+          <div className="space-y-3">
+            <h3 className="label">Search Panel</h3>
+            <div className="rounded-[var(--limn-radius-lg)] border border-border-light overflow-hidden inline-flex h-[600px]">
+              <SearchPanel className="w-96" />
+            </div>
+          </div>
+
+          {/* ExtensionsPanel */}
+          <div className="space-y-3">
+            <h3 className="label">Extensions Panel</h3>
+            <div className="rounded-[var(--limn-radius-lg)] border border-border-light overflow-hidden inline-flex h-[600px]">
+              <ExtensionsPanel className="w-96" />
+            </div>
+          </div>
+
+          {/* GitPanel */}
+          <div className="space-y-3">
+            <h3 className="label">Git Panel</h3>
+            <div className="rounded-[var(--limn-radius-lg)] border border-border-light overflow-hidden inline-flex h-[600px]">
+              <GitPanel className="w-96" />
+            </div>
+          </div>
+
+          {/* TerminalPanel */}
+          <div className="space-y-3">
+            <h3 className="label">Terminal Panel</h3>
+            <div className="rounded-[var(--limn-radius-lg)] border border-border-light overflow-hidden">
+              <TerminalPanel />
+            </div>
+          </div>
+        </section>
+
+        {/* Dialog Components */}
+        <section className="space-y-6">
+          <h2 className="text-xl font-medium text-text-primary">Dialog Components</h2>
+
+          {/* Settings Panel */}
+          <div className="space-y-3">
+            <h3 className="label">Settings Panel</h3>
+            <div className="flex gap-3">
+              <Button onClick={() => setSettingsOpen(true)}>
+                <Settings size={16} className="mr-2" />
+                Open Settings
+              </Button>
+              <SettingsPanel open={settingsOpen} onOpenChange={setSettingsOpen} />
+            </div>
+          </div>
+
+          {/* Quick Actions Dialog */}
+          <div className="space-y-3">
+            <h3 className="label">Quick Actions Dialog (Command Palette)</h3>
+            <div className="flex gap-3">
+              <Button onClick={() => setQuickActionsOpen(true)}>
+                <Command size={16} className="mr-2" />
+                Open Command Palette
+              </Button>
+              <QuickActionsDialog open={quickActionsOpen} onOpenChange={setQuickActionsOpen} />
+            </div>
+          </div>
+
+          {/* Notification Center */}
+          <div className="space-y-3">
+            <h3 className="label">Notification Center</h3>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-text-secondary">
+                Click the bell icon in the top-right corner
+              </span>
+              <NotificationCenter />
             </div>
           </div>
         </section>
@@ -91,8 +206,12 @@ export default function Components() {
               <Button variant="ghost">Ghost</Button>
               <Button variant="outline">Outline</Button>
               <Button variant="link">Link</Button>
-              <Button variant="primary" size="sm">Small</Button>
-              <Button variant="primary" size="lg">Large</Button>
+              <Button variant="primary" size="sm">
+                Small
+              </Button>
+              <Button variant="primary" size="lg">
+                Large
+              </Button>
             </div>
           </div>
 
@@ -171,6 +290,25 @@ export default function Components() {
                 <Indicator variant="working" />
                 <span className="text-sm text-text-tertiary">Working</span>
               </div>
+            </div>
+          </div>
+
+          {/* Toast Notifications */}
+          <div className="space-y-3">
+            <h3 className="label">Toast Notifications</h3>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="outline" onClick={() => showToastExample('success')}>
+                Show Success
+              </Button>
+              <Button variant="outline" onClick={() => showToastExample('warning')}>
+                Show Warning
+              </Button>
+              <Button variant="outline" onClick={() => showToastExample('error')}>
+                Show Error
+              </Button>
+              <Button variant="outline" onClick={() => showToastExample('info')}>
+                Show Info
+              </Button>
             </div>
           </div>
         </section>

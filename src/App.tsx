@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Home as HomeIcon, Layout, Code, MessageSquare, Package, Menu, X, Palette, FileCode, Layers } from 'lucide-react'
-import { ToastProvider } from './components/ui/toast'
+import { ToastProvider } from './components/ui/Toast'
 
 // Pages
 import Home from './pages/Home'

@@ -109,18 +109,18 @@
     --limn-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.4);
     --limn-shadow-xl: 0 24px 80px rgba(0, 0, 0, 0.5);
 
-    /* Code Editor Syntax - LIMN Clean Readable Palette */
-    --code-keyword: #ffcc99;        /* LIMN warm orange for keywords (포인트) */
-    --code-function: #ffd699;       /* Warm cream for functions (포인트) */
-    --code-class: #e5c07b;          /* Soft gold for classes */
-    --code-variable: #e2e8f0;       /* White for variables (가독성) */
-    --code-string: #d4a574;         /* Warm bronze for strings (포인트) */
-    --code-number: #cbd5e1;         /* Light gray for numbers */
-    --code-comment: rgba(255, 250, 245, 0.35); /* Muted for comments */
-    --code-property: #d4d4d8;       /* Light gray for properties (가독성) */
-    --code-tag: #ffb366;            /* Warm amber for JSX tags */
-    --code-attribute: #cbd5e1;      /* Light gray for attributes */
-    --code-punctuation: rgba(255, 250, 245, 0.6); /* Soft white for punctuation */
+    /* Code Editor Syntax - Colorful Vibrant Palette */
+    --code-keyword: #c678dd;        /* Purple for keywords (const, class, return) */
+    --code-function: #e5c07b;       /* Gold for functions */
+    --code-class: #56b6c2;          /* Cyan for classes */
+    --code-variable: #d19a66;       /* Orange for variables */
+    --code-string: #98c379;         /* Green for strings */
+    --code-number: #d19a66;         /* Orange for numbers */
+    --code-comment: #7f848e;        /* Gray for comments */
+    --code-property: #61afef;       /* Blue for properties */
+    --code-tag: #e06c75;            /* Red/Coral for JSX tags */
+    --code-attribute: #d19a66;      /* Orange for attributes */
+    --code-punctuation: #abb2bf;    /* Light gray for punctuation */
   }
 
   * {
@@ -147,18 +147,5 @@
     );
     border: 1px solid rgba(255, 200, 150, 0.3);
     box-shadow: 0 0 40px rgba(255, 180, 120, 0.1);
-  }
-
-  /* Variable and Function highlighting - Round Outline */
-  .code-variable-highlight {
-    padding: 1px 4px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 200, 150, 0.3);
-  }
-
-  .code-function-highlight {
-    padding: 1px 4px;
-    border-radius: 4px;
-    border: 1px solid rgba(251, 191, 36, 0.4);
   }
 }

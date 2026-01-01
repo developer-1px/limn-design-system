@@ -191,7 +191,7 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
   const [expandedSymbols, setExpandedSymbols] = useState<Set<string>>(
     new Set(['UserService', 'UserRole', 'ApiConfig'])
   )
-  const [width, setWidth] = useState(256) // Default w-64 = 256px
+  const [width, setWidth] = useState(320) // Default w-80 = 320px
   const [isResizing, setIsResizing] = useState(false)
   const resizeRef = useRef<HTMLDivElement>(null)
 
@@ -461,7 +461,7 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
       <div key={`${symbol.kind}-${symbol.name}-${symbol.line}`} className="mb-0.5">
         {/* Symbol Header */}
         <div
-          className="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs hover:bg-white/5 transition-colors group"
+          className="flex flex-nowrap items-center gap-1 rounded px-1.5 py-0.5 text-xs hover:bg-white/5 transition-colors group overflow-hidden"
           style={{ paddingLeft: `${indent + 6}px` }}
         >
           {/* Expand/Collapse */}
@@ -474,7 +474,7 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
               )}
             </button>
           ) : (
-            <div className="w-[11px]" />
+            <div className="w-[11px] flex-shrink-0" />
           )}
 
           {/* 1. Kind Icon (class, interface, function, const, etc) */}
@@ -482,13 +482,13 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
 
           {/* 2. Name + Params (tightly coupled for functions) */}
           <span
-            className={`${getSymbolColor(symbol.kind)} cursor-pointer font-medium flex items-baseline`}
+            className={`${getSymbolColor(symbol.kind)} cursor-pointer font-medium flex items-baseline flex-shrink whitespace-nowrap overflow-hidden text-ellipsis min-w-0`}
             onClick={() => handleSymbolClick(symbol.line)}
             title={`${symbol.jsDoc || ''}\nLine ${symbol.line}`}
           >
-            <span>{symbol.name}</span>
+            <span className="truncate">{symbol.name}</span>
             {paramsText && (
-              <span className="text-text-muted/60 text-2xs font-mono">
+              <span className="text-text-muted/60 text-2xs font-mono flex-shrink-0">
                 {paramsText}
               </span>
             )}
@@ -499,21 +499,21 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
 
           {/* 5. Type annotation : Type */}
           {symbol.type && !symbol.from && (
-            <span className="text-text-tertiary/50 text-2xs font-mono">
+            <span className="text-text-tertiary/50 text-2xs font-mono whitespace-nowrap flex-shrink-0">
               : {symbol.type}
             </span>
           )}
 
           {/* Value for enums/consts = value */}
           {symbol.value && (
-            <span className="text-text-muted/50 text-2xs">
+            <span className="text-text-muted/50 text-2xs whitespace-nowrap flex-shrink-0">
               = {symbol.value}
             </span>
           )}
 
           {/* Import path: from 'path' */}
           {symbol.from && (
-            <span className="text-text-muted/40 text-2xs italic">
+            <span className="text-text-muted/40 text-2xs italic whitespace-nowrap flex-shrink-0">
               from {symbol.from}
             </span>
           )}
