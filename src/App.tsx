@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { ToastProvider } from './components/ui/Toast'
-import { TopMenuBar } from '@/ui/layout/TopMenuBar'
+import { TopMenuBar } from '@/widgets/layout/TopMenuBar'
 
 // Pages
 import Home from './pages/Home'
@@ -9,6 +9,7 @@ import EditorView from './pages/EditorView'
 import ChatPanel from './pages/ChatPanel'
 import Components from './pages/Components'
 import Primitives from './pages/Primitives'
+import Tokens from './pages/Tokens'
 
 function AppContent() {
   const location = useLocation()
@@ -22,11 +23,12 @@ function AppContent() {
       <TopMenuBar autoHide={isFullscreen} />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/tokens" element={<Tokens />} />
+        <Route path="/primitives" element={<Primitives />} />
+        <Route path="/components" element={<Components />} />
         <Route path="/ide" element={<IDELayout />} />
         <Route path="/editor" element={<EditorView />} />
         <Route path="/chat" element={<ChatPanel />} />
-        <Route path="/components" element={<Components />} />
-        <Route path="/primitives" element={<Primitives />} />
       </Routes>
     </>
   )

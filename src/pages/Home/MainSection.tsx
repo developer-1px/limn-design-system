@@ -11,8 +11,8 @@ interface MainSectionProps {
 export default function MainSection({ label, title, description, variant = 'normal', children }: MainSectionProps) {
   if (variant === 'wide') {
     return (
-      <section className="w-full -mx-12 px-12 py-20 bg-bg-deep/50">
-        <div className="max-w-7xl mx-auto space-y-10">
+      <section className="w-full px-12 py-20 bg-bg-deep/50">
+        <div className="max-w-6xl mx-auto space-y-10">
           <div className="text-center space-y-3">
             <p
               className="text-xs tracking-[0.2em] mb-2"

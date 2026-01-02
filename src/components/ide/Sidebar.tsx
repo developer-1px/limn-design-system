@@ -9,7 +9,7 @@
  * @deprecated Use pure UI components from @/components/ui/ instead
  */
 
-import { Sidebar as DeprecatedSidebar } from '@/deprecated/ide/Sidebar'
+import { Sidebar as DeprecatedSidebar } from '@/components/deprecated/ide/Sidebar'
 
 /**
  * Sidebar - Resizable sidebar with header

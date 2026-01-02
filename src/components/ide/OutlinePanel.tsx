@@ -10,9 +10,9 @@
  * @deprecated Use pure UI components from @/components/ui/ instead
  */
 
-import { OutlinePanel as DeprecatedOutlinePanel } from '@/deprecated/ide/OutlinePanel'
-import type { OutlineNode } from '../../shared/outlineExtractor'
-import type { DefinitionSymbol } from '../../shared/definitionExtractor'
+import { OutlinePanel as DeprecatedOutlinePanel } from '@/components/deprecated/ide/OutlinePanel'
+import type { OutlineNode } from '@/components/deprecated/shared/outlineExtractor'
+import type { DefinitionSymbol } from '@/components/deprecated/shared/definitionExtractor'
 
 export interface OutlinePanelProps {
   /** Whether the panel is initially open */

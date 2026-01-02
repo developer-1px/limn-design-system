@@ -10,8 +10,8 @@
  * @deprecated Use pure UI components from @/components/ui/ instead
  */
 
-import { DefinitionPanel as DeprecatedDefinitionPanel } from '@/deprecated/ide/DefinitionPanel'
-import type { DefinitionSymbol } from '../../shared/definitionExtractor'
+import { DefinitionPanel as DeprecatedDefinitionPanel } from '@/components/deprecated/ide/DefinitionPanel'
+import type { DefinitionSymbol } from '@/components/deprecated/shared/definitionExtractor'
 
 export interface DefinitionPanelProps {
   /** Callback when a symbol is clicked */

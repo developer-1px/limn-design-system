@@ -8,8 +8,8 @@ import {
   FunctionSquare,
   Box,
 } from 'lucide-react'
-import { cn } from '@/components/lib/utils'
-import type { DefinitionSymbol, SymbolKind } from '@/components/deprecated/shared/definitionExtractor'
+import { cn } from '@/components/lib/utils.ts'
+import type { DefinitionSymbol, SymbolKind } from '@/components/deprecated/shared/definitionExtractor.ts'
 
 interface DefinitionPanelItemProps {
   symbol: DefinitionSymbol

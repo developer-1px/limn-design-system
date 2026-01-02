@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { ScrollArea } from '@/components/ui/ScrollArea'
 import { Button } from '@/components/ui/Button'
+import { PageHeader } from '@/widgets/common/PageHeader'
 import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { Card } from '@/components/ui/Card'
@@ -45,18 +45,26 @@ export default function Primitives() {
   }, [])
 
   return (
-    <div className="flex h-screen flex-col bg-bg-deep">
-      {/* Header */}
-      <div className="border-b border-border-DEFAULT bg-bg-elevated px-6 py-4">
-        <h1 className="text-2xl font-semibold text-text-primary">LIMN Primitives</h1>
-        <p className="mt-1 text-sm text-text-secondary">
-          All UI primitives with LIMN design tokens
-        </p>
-      </div>
-
-      {/* Content */}
-      <ScrollArea className="flex-1">
-        <div className="mx-auto max-w-6xl space-y-12 p-6">
+    <div
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(180deg, #08080d 0%, #0a0a10 50%, #0d0a10 100%)',
+        fontFamily: '-apple-system, BlinkMacSystemFont, sans-serif',
+        padding: 'calc(var(--limn-titlebar-height) + 48px) 32px 64px 32px',
+        color: 'rgba(255,250,245,0.7)',
+      }}
+    >
+      {/* Container - centered, narrow */}
+      <div
+        style={{
+          maxWidth: 720,
+          margin: '0 auto',
+        }}
+      >
+        {/* Header */}
+        <div style={{ marginBottom: 64 }}>
+          <PageHeader subtitle="UI Primitives" />
+        </div>
           {/* Form & Input */}
           <Section title="Form & Input" description="Interactive form controls">
             <Example title="Button" description="Primary, ghost, and outline variants">
@@ -322,8 +330,7 @@ export default function Primitives() {
               </div>
             </Example>
           </Section>
-        </div>
-      </ScrollArea>
+      </div>
     </div>
   )
 }
@@ -337,13 +344,26 @@ interface SectionProps {
 
 function Section({ title, description, children }: SectionProps) {
   return (
-    <section className="space-y-6">
-      <div className="border-b border-border-DEFAULT pb-3">
-        <h2 className="text-xl font-semibold text-text-primary">{title}</h2>
-        <p className="mt-1 text-sm text-text-muted">{description}</p>
+    <div style={{ marginBottom: 48 }}>
+      <div style={{ marginBottom: 24, paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
+        <h2
+          style={{
+            color: 'rgba(255,240,220,0.95)',
+            fontSize: 18,
+            fontWeight: 500,
+            margin: 0,
+          }}
+        >
+          {title}
+        </h2>
+        <p style={{ color: 'rgba(255,250,245,0.5)', fontSize: 13, margin: '8px 0 0 0' }}>
+          {description}
+        </p>
       </div>
-      <div className="space-y-8">{children}</div>
-    </section>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        {children}
+      </div>
+    </div>
   )
 }
 
@@ -355,12 +375,23 @@ interface ExampleProps {
 
 function Example({ title, description, children }: ExampleProps) {
   return (
-    <div className="space-y-3">
-      <div>
-        <h3 className="text-sm font-medium text-text-primary">{title}</h3>
-        <p className="text-xs text-text-muted">{description}</p>
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 12 }}>
+        <h3 style={{ color: 'rgba(255,250,245,0.8)', fontSize: 14, fontWeight: 500, margin: 0 }}>
+          {title}
+        </h3>
+        <p style={{ color: 'rgba(255,250,245,0.4)', fontSize: 12, margin: '4px 0 0 0' }}>
+          {description}
+        </p>
       </div>
-      <div className="rounded-lg border border-border-DEFAULT bg-bg-surface p-6">
+      <div
+        style={{
+          padding: 24,
+          borderRadius: 12,
+          background: 'rgba(255,255,255,0.03)',
+          border: '1px solid rgba(255,255,255,0.08)',
+        }}
+      >
         {children}
       </div>
     </div>

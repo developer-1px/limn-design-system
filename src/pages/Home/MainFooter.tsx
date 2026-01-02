@@ -1,7 +1,7 @@
 export default function MainFooter() {
   return (
-    <footer className="text-center pt-16 pb-8 space-y-4">
-      <div className="flex items-center justify-center gap-2 mb-2">
+    <footer className="text-center pt-20 pb-8 space-y-6">
+      <div className="flex items-center justify-center gap-3 mb-4">
         <div
           style={{
             width: 16,
@@ -22,10 +22,10 @@ export default function MainFooter() {
         </span>
       </div>
       <p className="text-xs text-text-faint tracking-wider">
-        v2.0.0 — Design System for AI-Powered IDEs
+        Illuminating code with warm clarity
       </p>
-      <p className="text-2xs text-text-faint">
-        Where blurry intentions become clear forms
+      <p className="text-2xs text-text-faint/60">
+        v2.0.0 — Design System for AI-Powered IDEs
       </p>
     </footer>
   )

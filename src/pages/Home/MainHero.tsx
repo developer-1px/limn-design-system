@@ -80,9 +80,9 @@ export default function MainHero() {
       </div>
 
       {/* Tagline - Enhanced */}
-      <div className="space-y-4">
+      <div className="space-y-4 text-center">
         <p
-          className="text-base tracking-[0.15em] leading-relaxed max-w-md"
+          className="text-base tracking-[0.15em] leading-relaxed max-w-md mx-auto"
           style={{
             color: 'rgba(255,250,245,0.5)',
             textShadow: '0 0 20px rgba(255,200,150,0.1)',
@@ -91,7 +91,7 @@ export default function MainHero() {
           흐릿한 의도가 선명한 형태가 되는 곳
         </p>
 
-        <p className="text-sm text-text-tertiary max-w-xl leading-relaxed">
+        <p className="text-sm text-text-tertiary max-w-xl leading-relaxed mx-auto">
           AI-powered IDE interface components with a warm, focused design language
         </p>
       </div>
