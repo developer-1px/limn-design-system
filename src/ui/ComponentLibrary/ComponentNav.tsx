@@ -49,10 +49,10 @@ export const ComponentNav: React.FC<ComponentNavProps> = ({
   }
 
   return (
-    <nav className="w-60 h-full bg-bg-elevated border-r border-border-DEFAULT flex flex-col overflow-hidden">
+    <nav className="w-60 h-full bg-bg-elevated border-r border-border-DEFAULT flex flex-col overflow-hidden" style={{ userSelect: 'none' }}>
       {/* Header */}
-      <div className="px-4 py-3 border-b border-border-DEFAULT">
-        <h2 className="text-sm font-medium text-text-primary">Components</h2>
+      <div className="px-4 py-2 border-b border-border-DEFAULT">
+        <h2 className="text-xs font-medium text-text-secondary uppercase tracking-wide">Components</h2>
         <p className="text-2xs text-text-muted mt-0.5">Browse by category</p>
       </div>
 

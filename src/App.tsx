@@ -9,11 +9,6 @@ import EditorView from './pages/EditorView'
 import ChatPanel from './pages/ChatPanel'
 import Components from './pages/Components'
 
-// Original Samples
-import StyleGuide from './pages/samples/StyleGuide'
-import IDEComponents from './pages/samples/IDEComponents'
-import IDEClean from './pages/samples/IDEClean'
-
 function AppContent() {
   const location = useLocation()
 
@@ -30,11 +25,6 @@ function AppContent() {
         <Route path="/editor" element={<EditorView />} />
         <Route path="/chat" element={<ChatPanel />} />
         <Route path="/components" element={<Components />} />
-
-        {/* Original Samples */}
-        <Route path="/samples/style-guide" element={<StyleGuide />} />
-        <Route path="/samples/ide-components" element={<IDEComponents />} />
-        <Route path="/samples/ide-clean" element={<IDEClean />} />
       </Routes>
     </>
   )
