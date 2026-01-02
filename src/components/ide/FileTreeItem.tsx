@@ -15,6 +15,7 @@ export interface FileTreeItemProps {
   onFocus?: () => void // Single click - update focus
   onDoubleClick?: () => void // Double click - open file or toggle folder
   fileExtension?: string // File extension for icon coloring (.ts, .vue, .json, etc.)
+  dirty?: boolean // File has unsaved changes
 }
 
 export const FileTreeItem = React.forwardRef<HTMLDivElement, FileTreeItemProps>(

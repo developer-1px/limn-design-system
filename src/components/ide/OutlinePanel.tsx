@@ -19,6 +19,8 @@ export interface OutlinePanelProps {
   defaultOpen?: boolean
   /** Callback when a node is clicked */
   onNodeClick?: (line: number) => void
+  /** Alias for onNodeClick - callback when a method is clicked */
+  onMethodClick?: (line: number) => void
   /** Outline nodes to display */
   nodes?: OutlineNode[]
   /** Definition symbols to display */

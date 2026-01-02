@@ -18,7 +18,7 @@ import * as React from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@/components/lib/utils'
 
-export interface PanelHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface PanelHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Header title (can be string or ReactNode) */
   title?: React.ReactNode
   /** Action buttons or custom content */

@@ -80,12 +80,12 @@ function getFileName(filePath: string): string {
 export interface CommandPaletteProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  query: string;
-  onQueryChange: (query: string) => void;
-  results: SearchResult[];
-  selectedIndex: number;
-  onSelectedIndexChange: (index: number) => void;
-  onSelectResult: (result: SearchResult) => void;
+  query?: string;
+  onQueryChange?: (query: string) => void;
+  results?: SearchResult[];
+  selectedIndex?: number;
+  onSelectedIndexChange?: (index: number) => void;
+  onSelectResult?: (result: SearchResult) => void;
 }
 
 export function CommandPalette({

@@ -3,7 +3,7 @@ import { cn } from '@/components/lib/utils'
 import { LucideIcon } from 'lucide-react'
 
 export interface ContextMenuItem {
-  label: string
+  label?: string
   icon?: LucideIcon
   shortcut?: string
   separator?: boolean
