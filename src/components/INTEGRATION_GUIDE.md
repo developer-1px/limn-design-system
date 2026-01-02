@@ -28,18 +28,48 @@ LIMN Design System provides **pure UI components** that are framework-agnostic a
 
 ### 1. UI Components (`src/components/ui/`)
 Base components that follow shadcn/ui patterns:
-- Button, Input, Card, Badge, Indicator
-- Dialog, Dropdown, Popover, Select
-- Checkbox, Switch, RadioGroup, Textarea
-- Command, **CommandPalette**, Toast
-- Label, Separator, Tabs, ScrollArea
+
+**Form & Input:**
+- Button, Input, Textarea
+- Checkbox, Switch, RadioGroup
+- Select, Autocomplete
+- Label
+
+**Layout & Structure:**
+- Card, Separator, ScrollArea
+- **ResizablePanel** - Drag-to-resize panel with handle
+- **CollapsibleSection** - Expandable/collapsible section with header
+- **TreeView** - Generic tree structure for hierarchical data
+- **PanelHeader** - Reusable panel header with actions
+
+**Overlay & Navigation:**
+- Dialog, Popover, DropdownMenu
+- Tabs, ContextMenu
+- Command, **CommandPalette**
+
+**Feedback & Status:**
+- Badge, Indicator, Toast
 
 ### 2. IDE Components (`src/components/ide/`)
 Specialized components for IDE interfaces:
-- TitleBar, ActivityBar, StatusBar, TabBar
-- Sidebar, FileTreeItem
-- OutlinePanel, OutlinePanelItem
-- DefinitionPanel, DefinitionPanelItem
+
+**App Shell:**
+- TitleBar - Window title bar with traffic lights
+- ActivityBar, ActivityBarItem - Vertical navigation
+- StatusBar - Bottom status bar with git info
+- TabBar, Tab - File tabs with dirty state
+
+**Sidebar & Navigation:**
+- Sidebar - File tree sidebar (deprecated wrapper)
+- FileTreeItem - Individual file/folder item
+
+**Code Structure:**
+- OutlinePanel - Code outline view (deprecated wrapper)
+- OutlinePanelItem - Outline tree item
+- DefinitionPanel - Code definitions (deprecated wrapper)
+- DefinitionPanelItem - Definition tree item
+
+**Tool Panels:**
 - SearchPanel, GitPanel, TerminalPanel
 - ExtensionsPanel, SettingsPanel
 - NotificationCenter, QuickActionsDialog
@@ -148,6 +178,209 @@ export default defineConfig({
 ```
 
 ## Component-Specific Integration
+
+### ResizablePanel
+
+A reusable panel component with drag-to-resize functionality.
+
+**Props:**
+```tsx
+interface ResizablePanelProps {
+  children: React.ReactNode;
+  defaultWidth?: number;         // Default: 240px
+  minWidth?: number;             // Default: 180px
+  maxWidth?: number;             // Default: 600px
+  resizeDirection?: 'left' | 'right'; // Default: 'right'
+  onWidthChange?: (width: number) => void;
+  showHandle?: boolean;          // Default: true
+}
+```
+
+**Usage Example:**
+```tsx
+import { ResizablePanel } from '@/components/ui/ResizablePanel';
+import { PanelHeader } from '@/components/ui/PanelHeader';
+
+function MySidebar() {
+  const [width, setWidth] = useState(240);
+
+  return (
+    <ResizablePanel
+      defaultWidth={240}
+      minWidth={180}
+      maxWidth={400}
+      resizeDirection="right"
+      onWidthChange={setWidth}
+    >
+      <PanelHeader title="MY PANEL" />
+      <div className="p-4">
+        Panel content here
+      </div>
+    </ResizablePanel>
+  );
+}
+```
+
+### CollapsibleSection
+
+Expandable/collapsible section with header - supports both controlled and uncontrolled state.
+
+**Props:**
+```tsx
+interface CollapsibleSectionProps {
+  children: React.ReactNode;
+  header: React.ReactNode;
+  defaultOpen?: boolean;         // Uncontrolled: default state
+  open?: boolean;                // Controlled: current state
+  onOpenChange?: (open: boolean) => void;
+  headerActions?: React.ReactNode; // Optional actions in header
+}
+```
+
+**Usage Example:**
+```tsx
+import { CollapsibleSection } from '@/components/ui/CollapsibleSection';
+import { ChevronDown } from 'lucide-react';
+
+// Uncontrolled (component manages state internally)
+function MyPanel() {
+  return (
+    <CollapsibleSection
+      header={<span className="label">SECTION TITLE</span>}
+      defaultOpen={true}
+    >
+      <div className="p-4">
+        Section content
+      </div>
+    </CollapsibleSection>
+  );
+}
+
+// Controlled (you manage state)
+function MyControlledPanel() {
+  const [open, setOpen] = useState(true);
+
+  return (
+    <CollapsibleSection
+      header={<span className="label">SECTION TITLE</span>}
+      open={open}
+      onOpenChange={setOpen}
+      headerActions={
+        <button onClick={() => console.log('action')}>
+          Action
+        </button>
+      }
+    >
+      <div className="p-4">
+        Section content
+      </div>
+    </CollapsibleSection>
+  );
+}
+```
+
+### TreeView
+
+Generic tree structure view for hierarchical data display.
+
+**Props:**
+```tsx
+interface TreeNode {
+  key: string;
+  label: React.ReactNode;
+  children?: TreeNode[];
+  [key: string]: any;  // Custom properties
+}
+
+interface TreeViewProps<T extends TreeNode> {
+  items: T[];
+  defaultExpandedKeys?: string[];
+  expandedKeys?: string[];       // Controlled expansion
+  onToggle?: (key: string, isExpanded: boolean) => void;
+  onNodeClick?: (node: T) => void;
+  renderItem?: (node: T, isExpanded: boolean, depth: number) => React.ReactNode;
+}
+```
+
+**Usage Example:**
+```tsx
+import { TreeView, TreeNode } from '@/components/ui/TreeView';
+import { Folder, File } from 'lucide-react';
+
+interface FileNode extends TreeNode {
+  type: 'file' | 'folder';
+  path: string;
+}
+
+function FileExplorer() {
+  const files: FileNode[] = [
+    {
+      key: 'src',
+      label: 'src',
+      type: 'folder',
+      path: '/src',
+      children: [
+        { key: 'index.ts', label: 'index.ts', type: 'file', path: '/src/index.ts' }
+      ]
+    }
+  ];
+
+  return (
+    <TreeView
+      items={files}
+      defaultExpandedKeys={['src']}
+      onNodeClick={(node) => console.log('Clicked:', node.path)}
+      renderItem={(node, isExpanded, depth) => (
+        <div className="flex items-center gap-2">
+          {node.type === 'folder' ? <Folder size={14} /> : <File size={14} />}
+          <span>{node.label}</span>
+        </div>
+      )}
+    />
+  );
+}
+```
+
+### PanelHeader
+
+Reusable panel header component with optional actions and close button.
+
+**Props:**
+```tsx
+interface PanelHeaderProps {
+  title?: React.ReactNode;
+  actions?: React.ReactNode;
+  showClose?: boolean;
+  onClose?: () => void;
+  closeLabel?: string;
+}
+```
+
+**Usage Example:**
+```tsx
+import { PanelHeader } from '@/components/ui/PanelHeader';
+import { Settings } from 'lucide-react';
+
+function MyPanel() {
+  return (
+    <div>
+      <PanelHeader
+        title={<span className="label">MY PANEL</span>}
+        actions={
+          <button>
+            <Settings size={14} />
+          </button>
+        }
+        showClose
+        onClose={() => console.log('Panel closed')}
+      />
+      <div className="p-4">
+        Panel content
+      </div>
+    </div>
+  );
+}
+```
 
 ### CommandPalette
 
@@ -326,6 +559,113 @@ function FileSidebar() {
 2. **File Opening** - Handle double-click to open files
 3. **Folder Toggle** - Expand/collapse folder logic
 
+### ActivityBar & StatusBar
+
+**ActivityBar** - Vertical navigation bar for primary sections:
+
+```tsx
+import { ActivityBar, ActivityBarItem } from '@/components/ide/ActivityBar';
+import { Files, Search, GitBranch, Settings } from 'lucide-react';
+
+function MyIDE() {
+  const [activeView, setActiveView] = useState('files');
+
+  return (
+    <ActivityBar>
+      <ActivityBarItem
+        icon={Files}
+        label="Files"
+        active={activeView === 'files'}
+        onClick={() => setActiveView('files')}
+      />
+      <ActivityBarItem
+        icon={Search}
+        label="Search"
+        active={activeView === 'search'}
+        hasBadge  // Show notification badge
+        onClick={() => setActiveView('search')}
+      />
+      <ActivityBarItem
+        icon={GitBranch}
+        label="Source Control"
+        active={activeView === 'git'}
+        onClick={() => setActiveView('git')}
+      />
+      <ActivityBarItem
+        icon={Settings}
+        label="Settings"
+        active={activeView === 'settings'}
+        onClick={() => setActiveView('settings')}
+      />
+    </ActivityBar>
+  );
+}
+```
+
+**StatusBar** - Bottom status bar with git and editor info:
+
+```tsx
+import { StatusBar } from '@/components/ide/StatusBar';
+
+function MyEditor() {
+  // YOUR BUSINESS LOGIC: Get current editor state
+  const currentFile = useCurrentFile();
+  const cursorPosition = useCursorPosition();
+  const gitStatus = useGitStatus();
+
+  return (
+    <StatusBar
+      branch={gitStatus.branch}
+      ahead={gitStatus.ahead}
+      behind={gitStatus.behind}
+      line={cursorPosition.line}
+      column={cursorPosition.column}
+      encoding="UTF-8"
+      language={currentFile.language}
+      aiActive={false}
+    />
+  );
+}
+```
+
+### TabBar & Tab
+
+File tabs with dirty state and close buttons:
+
+```tsx
+import { TabBar, Tab } from '@/components/ide/TabBar';
+import { FileCode } from 'lucide-react';
+
+function EditorTabs() {
+  const [openFiles, setOpenFiles] = useState([
+    { id: '1', name: 'App.tsx', dirty: true },
+    { id: '2', name: 'index.ts', dirty: false },
+  ]);
+  const [activeTab, setActiveTab] = useState('1');
+
+  const handleClose = (id: string) => {
+    // YOUR BUSINESS LOGIC: Save dirty files, update state
+    setOpenFiles(files => files.filter(f => f.id !== id));
+  };
+
+  return (
+    <TabBar>
+      {openFiles.map(file => (
+        <Tab
+          key={file.id}
+          icon={FileCode}
+          label={file.name}
+          active={activeTab === file.id}
+          dirty={file.dirty}
+          onClick={() => setActiveTab(file.id)}
+          onClose={() => handleClose(file.id)}
+        />
+      ))}
+    </TabBar>
+  );
+}
+```
+
 ## Design Tokens Reference
 
 ### Colors (Tailwind CSS 4 `@theme` format)
@@ -393,7 +733,12 @@ function FileSidebar() {
 
 ## Version
 
-- **LIMN Design System**: v2.0
+- **LIMN Design System**: v2.1
 - **Last Updated**: 2026-01-02
-- **Components**: 40+ UI & IDE components
+- **Components**: 44+ UI & IDE components (4 new pure UI components added)
 - **TypeScript**: Full type coverage
+- **New in v2.1**:
+  - ResizablePanel - Drag-to-resize panel
+  - CollapsibleSection - Expandable sections
+  - TreeView - Generic tree structure
+  - PanelHeader - Reusable panel header
