@@ -8,7 +8,8 @@
       "Bash(do if [ -f \"../../components/ide/$f\" ])",
       "Bash(then if ! diff -q \"../../components/ide/$f\" \"$f\")",
       "Bash(/dev/null)",
-      "Bash(then echo \"MODIFIED: ide/$f\" fi else echo \"NEW: ide/$f\" fi done)"
+      "Bash(then echo \"MODIFIED: ide/$f\" fi else echo \"NEW: ide/$f\" fi done)",
+      "WebFetch(domain:ui.shadcn.com)"
     ],
     "deny": [],
     "ask": []
