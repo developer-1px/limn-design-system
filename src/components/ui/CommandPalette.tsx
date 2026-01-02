@@ -1,6 +1,20 @@
 /**
  * Command Palette - LIMN Design System Component
- * Adapted for vibe-code-viewer UnifiedSearch
+ * Pure UI component for unified search interface
+ *
+ * @example
+ * ```tsx
+ * <CommandPalette
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   query={query}
+ *   onQueryChange={setQuery}
+ *   results={searchResults}
+ *   selectedIndex={selectedIndex}
+ *   onSelectedIndexChange={setSelectedIndex}
+ *   onSelectResult={(result) => console.log('Selected:', result)}
+ * />
+ * ```
  */
 
 import * as React from 'react';
@@ -18,8 +32,50 @@ import {
   SquareFunction
 } from 'lucide-react';
 import { cn } from '@/components/lib/utils';
-import type { SearchResult } from '../../features/UnifiedSearch/model/types';
-import { getFileName } from '../../shared/pathUtils';
+
+// ============================================================================
+// TYPE DEFINITIONS - Implement these in your application
+// ============================================================================
+
+/**
+ * Search result type
+ * Implementation note: Customize this type based on your application needs
+ */
+export interface SearchResult {
+  /** Unique identifier for the result */
+  id: string;
+  /** Type of search result */
+  type: 'file' | 'folder' | 'symbol';
+  /** Display name */
+  name: string;
+  /** File path */
+  filePath: string;
+  /** Node type for symbols (optional) */
+  nodeType?: 'usage' | 'pure-function' | 'function' | 'state-ref' | 'ref' | 'computed';
+  /** Whether the symbol is exported (optional) */
+  isExported?: boolean;
+  /** Fuzzy match indices for highlighting (optional) */
+  matches?: Array<{
+    key: string;
+    indices: [number, number][];
+  }>;
+  /** Code snippet for symbols (optional) */
+  codeSnippet?: string;
+  /** Line number in file (optional) */
+  lineNumber?: number;
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Extract file name from a file path
+ */
+function getFileName(filePath: string): string {
+  const parts = filePath.split('/');
+  return parts[parts.length - 1] || filePath;
+}
 
 export interface CommandPaletteProps {
   open: boolean;
