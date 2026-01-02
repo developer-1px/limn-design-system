@@ -62,37 +62,60 @@ npm install lucide-react class-variance-authority clsx tailwind-merge
 
 Copy the following directories to your project:
 ```
-src/components/ui/       → your-project/src/components/ui/
-src/components/ide/      → your-project/src/components/ide/
-src/components/lib/      → your-project/src/components/lib/
-src/shared/              → your-project/src/shared/
-src/styles/globals.css   → your-project/src/styles/globals.css
-tailwind.config.js       → merge with your tailwind.config.js
+src/components/ui/         → your-project/src/components/ui/
+src/components/ide/        → your-project/src/components/ide/
+src/components/lib/        → your-project/src/components/lib/
+src/shared/                → your-project/src/shared/
+src/components/globals.css → your-project/src/components/globals.css
 ```
 
-### Step 3: Configure Tailwind CSS
+### Step 3: Configure Tailwind CSS 4
 
-Merge LIMN's tailwind config with yours:
+LIMN uses **Tailwind CSS 4** with the new `@theme` directive. Copy the design tokens from `src/components/globals.css`:
 
-```js
-// tailwind.config.js
-export default {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {
-      colors: {
-        // Copy from LIMN's tailwind.config.js
-        'bg-deep': '#08080d',
-        'bg-base': '#0a0a10',
-        // ... (see full config in LIMN repo)
-      },
-      // ... other LIMN tokens
-    },
-  },
+```css
+/* your-project/src/components/globals.css */
+@import "tailwindcss";
+
+@theme {
+  /* Copy all LIMN theme tokens from src/components/globals.css */
+
+  /* Background Colors */
+  --color-bg-deep: #0d0d12;
+  --color-bg-base: #0f0f16;
+  --color-bg-surface: rgb(20 20 28 / 0.95);
+  --color-bg-elevated: #14141c;
+
+  /* Warm Accent */
+  --color-warm-300: #ffcc99;
+  --color-warm-400: rgb(255 200 150 / 0.9);
+  --color-warm-glow: rgb(255 180 120 / 0.15);
+
+  /* Text */
+  --color-text-primary: rgb(255 240 220 / 0.95);
+  --color-text-secondary: rgb(255 250 245 / 0.7);
+  --color-text-muted: rgb(255 250 245 / 0.35);
+
+  /* ... (see full @theme in LIMN's globals.css) */
 }
+
+@layer base {
+  :root {
+    /* LIMN layout dimensions */
+    --limn-titlebar-height: 32px;
+    --limn-statusbar-height: 22px;
+    --limn-indent: 12px;
+    --limn-file-item-height: 24px;
+    /* ... (see full CSS variables in LIMN's globals.css) */
+  }
+}
+
+/* Custom utility classes */
+.label { /* ... */ }
+.active-glow { /* ... */ }
 ```
+
+**Important:** Tailwind CSS 4 does NOT use `tailwind.config.js`. All configuration is done via CSS `@theme` directive.
 
 ### Step 4: Set Up Path Aliases
 
@@ -303,29 +326,35 @@ function FileSidebar() {
 
 ## Design Tokens Reference
 
-### Colors
+### Colors (Tailwind CSS 4 `@theme` format)
 ```css
-/* Background */
---bg-deep: #08080d;
---bg-base: #0a0a10;
---bg-elevated: rgba(18, 18, 28, 0.9);
---bg-surface: rgba(255, 255, 255, 0.03);
+/* Background - Use with bg-{name} utility */
+--color-bg-deep: #0d0d12;
+--color-bg-base: #0f0f16;
+--color-bg-elevated: #14141c;
+--color-bg-surface: rgb(20 20 28 / 0.95);
 
-/* Warm Accent */
---warm-300: #ffcc99;
---warm-400: rgba(255, 200, 150, 0.9);
---warm-500: rgba(255, 180, 120, 0.9);
+/* Warm Accent - Use with warm-{number} utility */
+--color-warm-300: #ffcc99;
+--color-warm-400: rgb(255 200 150 / 0.9);
+--color-warm-500: rgb(255 180 120 / 0.8);
+--color-warm-glow: rgb(255 180 120 / 0.15);
 
-/* Text */
---text-primary: rgba(255, 240, 220, 0.95);
---text-secondary: rgba(255, 250, 245, 0.65);
---text-muted: rgba(255, 250, 245, 0.4);
---text-faint: rgba(255, 250, 245, 0.2);
+/* Text - Use with text-{name} utility */
+--color-text-primary: rgb(255 240 220 / 0.95);
+--color-text-secondary: rgb(255 250 245 / 0.7);
+--color-text-muted: rgb(255 250 245 / 0.35);
+--color-text-faint: rgb(255 250 245 / 0.2);
 
-/* Status */
---status-success: #4ade80;
---status-warning: #fbbf24;
---status-error: #f87171;
+/* Status - Use with status-{name} utility */
+--color-status-success: #4ade80;
+--color-status-warning: #fbbf24;
+--color-status-error: #f87171;
+
+/* Border - Use with border-{name} utility */
+--color-border-DEFAULT: rgb(255 255 255 / 0.06);
+--color-border-warm: rgb(255 200 150 / 0.2);
+--color-border-active: rgb(255 200 150 / 0.3);
 ```
 
 ### Spacing
