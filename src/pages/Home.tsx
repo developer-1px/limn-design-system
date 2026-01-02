@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { Indicator } from '@/components/ui/Indicator'
-import { Layout, Code, MessageSquare, Package } from 'lucide-react'
+import { Layout, Code, MessageSquare, Package, Files, GitBranch, Terminal, Folder, FileText, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
 interface ComponentExampleProps {
@@ -438,6 +438,114 @@ export default function Home() {
                       <div className="w-px h-3 bg-border-subtle" />
                       <span className="text-2xs text-text-muted">UTF-8</span>
                       <span className="text-2xs text-text-muted ml-auto">Ln 42, Col 18</span>
+                    </div>
+                  </div>
+                }
+              />
+
+              {/* Compact IDE */}
+              <ComponentExample
+                title="Compact IDE Layout"
+                description="Full desktop IDE with all core components"
+                preview={
+                  <div className="w-full bg-bg-deep rounded-lg border border-border-DEFAULT overflow-hidden" style={{ userSelect: 'none' }}>
+                    {/* Title Bar */}
+                    <div className="flex items-center justify-between px-2 py-1 bg-bg-elevated border-b border-border-DEFAULT">
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
+                          <div className="w-2 h-2 rounded-full bg-red-500/80" />
+                          <div className="w-2 h-2 rounded-full bg-yellow-500/80" />
+                          <div className="w-2 h-2 rounded-full bg-green-500/80" />
+                        </div>
+                        <span className="text-2xs text-text-secondary ml-2" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>App.tsx</span>
+                      </div>
+                      <span className="text-2xs text-text-muted">LIMN</span>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="flex h-48">
+                      {/* Activity Bar */}
+                      <div className="w-10 bg-bg-elevated border-r border-border-DEFAULT flex flex-col items-center gap-2 py-2">
+                        <div className="w-7 h-7 rounded flex items-center justify-center bg-warm-active-bg border border-warm-active-border">
+                          <Files size={14} className="text-warm-300" strokeWidth={1.5} />
+                        </div>
+                        <div className="w-7 h-7 rounded flex items-center justify-center hover:bg-white/5 transition-colors">
+                          <GitBranch size={14} className="text-text-muted" strokeWidth={1.5} />
+                        </div>
+                        <div className="w-7 h-7 rounded flex items-center justify-center hover:bg-white/5 transition-colors">
+                          <Terminal size={14} className="text-text-muted" strokeWidth={1.5} />
+                        </div>
+                      </div>
+
+                      {/* Sidebar */}
+                      <div className="w-40 bg-bg-elevated border-r border-border-DEFAULT flex flex-col">
+                        <div className="px-2 py-1.5 border-b border-border-DEFAULT">
+                          <span className="text-2xs text-text-muted uppercase tracking-wide">Explorer</span>
+                        </div>
+                        <div className="flex-1 py-1 space-y-0.5">
+                          <div className="flex items-center gap-1 px-2 py-0.5 hover:bg-white/5 transition-colors">
+                            <ChevronRight size={8} className="text-text-muted" />
+                            <Folder size={10} className="text-text-tertiary" strokeWidth={1.5} />
+                            <span className="text-2xs text-text-secondary" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>src</span>
+                          </div>
+                          <div className="flex items-center gap-1 px-2 py-0.5 bg-warm-active-bg border-l-2 border-warm-300">
+                            <div className="w-2" />
+                            <Code size={10} className="text-warm-300" strokeWidth={1.5} />
+                            <span className="text-2xs text-text-primary" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>App.tsx</span>
+                            <Badge variant="warning" className="ml-auto" style={{ fontSize: '8px', padding: '0 3px' }}>M</Badge>
+                          </div>
+                          <div className="flex items-center gap-1 px-2 py-0.5 hover:bg-white/5 transition-colors">
+                            <div className="w-2" />
+                            <FileText size={10} className="text-text-muted" strokeWidth={1.5} />
+                            <span className="text-2xs text-text-secondary" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>index.ts</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Editor */}
+                      <div className="flex-1 bg-bg-base flex flex-col">
+                        <div className="flex items-center px-2 py-1 border-b border-border-DEFAULT bg-bg-elevated">
+                          <div className="flex items-center gap-1.5 px-2 py-0.5 bg-warm-active-bg border-t-2 border-warm-300 rounded-t">
+                            <Code size={10} className="text-warm-300" strokeWidth={1.5} />
+                            <span className="text-2xs text-text-primary" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>App.tsx</span>
+                            <span className="text-2xs text-warm-300">●</span>
+                          </div>
+                        </div>
+                        <div className="flex-1 px-3 py-2 space-y-1" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace", fontSize: '10px' }}>
+                          <div className="flex gap-3">
+                            <span className="text-text-faint">1</span>
+                            <span className="text-text-secondary"><span style={{ color: 'var(--code-keyword)' }}>import</span> <span style={{ color: 'var(--code-variable)' }}>React</span> <span style={{ color: 'var(--code-keyword)' }}>from</span> <span style={{ color: 'var(--code-string)' }}>'react'</span></span>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="text-text-faint">2</span>
+                            <span className="text-text-secondary"></span>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="text-text-faint">3</span>
+                            <span className="text-text-secondary"><span style={{ color: 'var(--code-keyword)' }}>function</span> <span style={{ color: 'var(--code-function)' }}>App</span><span style={{ color: 'var(--code-punctuation)' }}>()</span> <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span></span>
+                          </div>
+                          <div className="flex gap-3 bg-warm-active-bg border-l-2 border-warm-300">
+                            <span className="text-text-faint pl-2">4</span>
+                            <span className="text-text-primary">  <span style={{ color: 'var(--code-keyword)' }}>return</span> <span style={{ color: 'var(--code-tag)' }}>&lt;div&gt;</span>Hello<span style={{ color: 'var(--code-tag)' }}>&lt;/div&gt;</span></span>
+                          </div>
+                          <div className="flex gap-3">
+                            <span className="text-text-faint">5</span>
+                            <span className="text-text-secondary"><span style={{ color: 'var(--code-punctuation)' }}>{'}'}</span></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Status Bar */}
+                    <div className="flex items-center gap-2 px-2 py-1 bg-bg-elevated border-t border-border-subtle" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace", fontSize: '9px' }}>
+                      <div className="flex items-center gap-1">
+                        <Indicator variant="active" size={4} />
+                        <span className="text-text-secondary">main</span>
+                      </div>
+                      <div className="w-px h-2 bg-border-subtle" />
+                      <Badge variant="error" style={{ fontSize: '8px', padding: '0 3px' }}>0</Badge>
+                      <Badge variant="warning" style={{ fontSize: '8px', padding: '0 3px' }}>0</Badge>
+                      <span className="text-text-muted ml-auto">Ln 4, Col 10</span>
                     </div>
                   </div>
                 }
