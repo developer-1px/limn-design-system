@@ -227,34 +227,33 @@ export function GitPanel({ className }: GitPanelProps) {
 
           {/* Staged Changes */}
           <div className="space-y-1">
-            <button
-              onClick={() => setShowStagedChanges(!showStagedChanges)}
-              className="w-full flex items-center gap-1 px-1 py-1 hover:bg-white/5 rounded transition-colors"
-            >
-              {showStagedChanges ? (
-                <ChevronDown size={14} className="text-text-muted" />
-              ) : (
-                <ChevronRight size={14} className="text-text-muted" />
-              )}
-              <span className="text-xs font-medium text-text-primary flex-1 text-left">
-                Staged Changes
-              </span>
-              <span className="text-xs text-text-muted">{stagedChanges.length}</span>
+            <div className="w-full flex items-center gap-1 px-1 py-1 hover:bg-white/5 rounded transition-colors">
+              <button
+                onClick={() => setShowStagedChanges(!showStagedChanges)}
+                className="flex items-center gap-1 flex-1"
+              >
+                {showStagedChanges ? (
+                  <ChevronDown size={14} className="text-text-muted" />
+                ) : (
+                  <ChevronRight size={14} className="text-text-muted" />
+                )}
+                <span className="text-xs font-medium text-text-primary flex-1 text-left">
+                  Staged Changes
+                </span>
+                <span className="text-xs text-text-muted">{stagedChanges.length}</span>
+              </button>
               {stagedChanges.length > 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-5 px-1 text-2xs"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    unstageAll()
-                  }}
+                  onClick={unstageAll}
                 >
                   <Minus size={10} className="mr-0.5" />
                   Unstage All
                 </Button>
               )}
-            </button>
+            </div>
 
             {showStagedChanges && (
               <div className="ml-2 space-y-0.5">
@@ -271,34 +270,33 @@ export function GitPanel({ className }: GitPanelProps) {
 
           {/* Unstaged Changes */}
           <div className="space-y-1">
-            <button
-              onClick={() => setShowUnstagedChanges(!showUnstagedChanges)}
-              className="w-full flex items-center gap-1 px-1 py-1 hover:bg-white/5 rounded transition-colors"
-            >
-              {showUnstagedChanges ? (
-                <ChevronDown size={14} className="text-text-muted" />
-              ) : (
-                <ChevronRight size={14} className="text-text-muted" />
-              )}
-              <span className="text-xs font-medium text-text-primary flex-1 text-left">
-                Changes
-              </span>
-              <span className="text-xs text-text-muted">{unstagedChanges.length}</span>
+            <div className="w-full flex items-center gap-1 px-1 py-1 hover:bg-white/5 rounded transition-colors">
+              <button
+                onClick={() => setShowUnstagedChanges(!showUnstagedChanges)}
+                className="flex items-center gap-1 flex-1"
+              >
+                {showUnstagedChanges ? (
+                  <ChevronDown size={14} className="text-text-muted" />
+                ) : (
+                  <ChevronRight size={14} className="text-text-muted" />
+                )}
+                <span className="text-xs font-medium text-text-primary flex-1 text-left">
+                  Changes
+                </span>
+                <span className="text-xs text-text-muted">{unstagedChanges.length}</span>
+              </button>
               {unstagedChanges.length > 0 && (
                 <Button
                   variant="ghost"
                   size="sm"
                   className="h-5 px-1 text-2xs"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    stageAll()
-                  }}
+                  onClick={stageAll}
                 >
                   <Plus size={10} className="mr-0.5" />
                   Stage All
                 </Button>
               )}
-            </button>
+            </div>
 
             {showUnstagedChanges && (
               <div className="ml-2 space-y-0.5">
