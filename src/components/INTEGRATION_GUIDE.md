@@ -75,11 +75,10 @@ LIMN uses **Tailwind CSS 4** with the new `@theme` directive. Copy the design to
 
 ```css
 /* your-project/src/components/globals.css */
-@import "tailwindcss";
+@import "../../node_modules/tailwindcss/dist/lib.d.mts";
 
 @theme {
   /* Copy all LIMN theme tokens from src/components/globals.css */
-
   /* Background Colors */
   --color-bg-deep: #0d0d12;
   --color-bg-base: #0f0f16;
@@ -111,8 +110,11 @@ LIMN uses **Tailwind CSS 4** with the new `@theme` directive. Copy the design to
 }
 
 /* Custom utility classes */
-.label { /* ... */ }
-.active-glow { /* ... */ }
+.label { /* ... */
+}
+
+.active-glow { /* ... */
+}
 ```
 
 **Important:** Tailwind CSS 4 does NOT use `tailwind.config.js`. All configuration is done via CSS `@theme` directive.
