@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { Home as HomeIcon, Layout, Code, MessageSquare, Package, Palette } from 'lucide-react'
+import { Home as HomeIcon, Layout, Code, MessageSquare, Package, Palette, Boxes } from 'lucide-react'
 
 interface TopMenuBarProps {
   autoHide?: boolean
@@ -72,6 +72,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
   const menuItems = [
     { path: '/', label: 'Home', icon: HomeIcon },
     { path: '/samples/style-guide', label: 'Tokens', icon: Palette },
+    { path: '/primitives', label: 'Primitives', icon: Boxes },
     { path: '/components', label: 'Components', icon: Package },
     { path: '/ide', label: 'IDE', icon: Layout },
     { path: '/chat', label: 'Chat', icon: MessageSquare },
