@@ -277,7 +277,6 @@ export function TerminalPanel({ className }: TerminalPanelProps) {
                 onChange={(e) => setCurrentInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 className="flex-1 bg-transparent text-text-primary outline-none caret-warm-300"
-                autoFocus
                 spellCheck={false}
               />
             </div>

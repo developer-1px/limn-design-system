@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import { Indicator } from '@/components/ui/Indicator'
 import { useToast } from '@/components/ui/Toast'
-import { ComponentNav } from '@/ui/ComponentLibrary/ComponentNav'
+import { ComponentNav } from '@/widgets/ComponentLibrary/ComponentNav'
 import {
   Files,
   Search,

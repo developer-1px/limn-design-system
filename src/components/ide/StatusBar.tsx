@@ -35,13 +35,12 @@ const StatusBar = React.forwardRef<HTMLDivElement, StatusBarProps>(
           'border-border-warm/30 bg-[rgba(255,200,150,0.08)]',
           className
         )}
-        style={{ userSelect: 'none' }}
         {...props}
       >
         {/* Left Side */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1">
-            <GitBranch size={10} className="text-text-muted" strokeWidth={1.5} />
+            <GitBranch size={11} className="text-text-muted" strokeWidth={1.5} />
             <span>{branch}</span>
             {(ahead > 0 || behind > 0) && (
               <div className="flex items-center gap-0.5 text-2xs">

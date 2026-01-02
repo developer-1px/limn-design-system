@@ -55,7 +55,7 @@ const ActivityBar = React.forwardRef<HTMLDivElement, ActivityBarProps>(
       <div
         ref={ref}
         className={cn(
-          'flex w-[var(--limn-activity-bar-width)] flex-col items-center gap-1.5 border-r border-border-DEFAULT bg-bg-elevated py-2',
+          'flex w-[var(--limn-activity-bar-width)] shrink-0 flex-col items-center gap-1.5 border-r border-border-DEFAULT bg-bg-elevated py-2',
           className
         )}
         {...props}

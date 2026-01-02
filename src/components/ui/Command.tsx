@@ -27,7 +27,7 @@ const CommandDialog = ({ children, ...props }: DialogProps) => {
   return (
     <Dialog {...props}>
       <DialogContent className="overflow-hidden p-0 border-border-medium shadow-xl max-w-[var(--limn-command-dialog-width)]">
-        <Command className="[&_[cmdk-group-heading]]:px-5 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-2xs [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-text-muted [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-0 [&_[cmdk-input-wrapper]_svg]:h-[var(--limn-command-icon-size)] [&_[cmdk-input-wrapper]_svg]:w-[var(--limn-command-icon-size)] [&_[cmdk-input]]:h-[var(--limn-command-input-height)] [&_[cmdk-item]]:px-5 [&_[cmdk-item]]:py-2.5 [&_[cmdk-item]_svg]:h-4 [&_[cmdk-item]_svg]:w-4">
+        <Command className="[&_[cmdk-group-heading]]:px-5 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-2xs [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-text-muted [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-0 [&_[cmdk-input-wrapper]_svg]:h-[18px] [&_[cmdk-input-wrapper]_svg]:w-[18px] [&_[cmdk-input]]:h-[var(--limn-command-input-height)] [&_[cmdk-item]]:px-5 [&_[cmdk-item]]:py-2.5 [&_[cmdk-item]_svg]:h-4 [&_[cmdk-item]_svg]:w-4">
           {children}
         </Command>
       </DialogContent>
@@ -40,7 +40,7 @@ const CommandInput = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
 >(({ className, ...props }, ref) => (
   <div className="flex items-center border-b border-border-DEFAULT px-5" cmdk-input-wrapper="">
-    <Search className="mr-3 h-[var(--limn-command-icon-size)] w-[var(--limn-command-icon-size)] shrink-0 text-text-muted" strokeWidth={1.5} />
+    <Search className="mr-3 h-[18px] w-[18px] shrink-0 text-text-muted" strokeWidth={1.5} />
     <CommandPrimitive.Input
       ref={ref}
       className={cn(

@@ -1,94 +1,337 @@
-import * as React from 'react'
-import { Search, File, Folder, Hash, Command, CornerDownLeft } from 'lucide-react'
-import { cn } from '@/components/lib/utils'
+/**
+ * Command Palette - LIMN Design System Component
+ * Pure UI component for unified search interface
+ *
+ * @example
+ * ```tsx
+ * <CommandPalette
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ *   query={query}
+ *   onQueryChange={setQuery}
+ *   results={searchResults}
+ *   selectedIndex={selectedIndex}
+ *   onSelectedIndexChange={setSelectedIndex}
+ *   onSelectResult={(result) => console.log('Selected:', result)}
+ * />
+ * ```
+ */
+
+import * as React from 'react';
+import {
+  Search,
+  File,
+  Folder,
+  Code2,
+  Database,
+  Calculator,
+  Eye,
+  Upload,
+  CornerDownLeft,
+  CodeXml,
+  SquareFunction
+} from 'lucide-react';
+import { cn } from '@/components/lib/utils';
+
+// ============================================================================
+// TYPE DEFINITIONS - Implement these in your application
+// ============================================================================
+
+/**
+ * Search result type
+ * Implementation note: Customize this type based on your application needs
+ */
+export interface SearchResult {
+  /** Unique identifier for the result */
+  id: string;
+  /** Type of search result */
+  type: 'file' | 'folder' | 'symbol';
+  /** Display name */
+  name: string;
+  /** File path */
+  filePath: string;
+  /** Node type for symbols (optional) */
+  nodeType?: 'usage' | 'pure-function' | 'function' | 'state-ref' | 'ref' | 'computed';
+  /** Whether the symbol is exported (optional) */
+  isExported?: boolean;
+  /** Fuzzy match indices for highlighting (optional) */
+  matches?: Array<{
+    key: string;
+    indices: [number, number][];
+  }>;
+  /** Code snippet for symbols (optional) */
+  codeSnippet?: string;
+  /** Line number in file (optional) */
+  lineNumber?: number;
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Extract file name from a file path
+ */
+function getFileName(filePath: string): string {
+  const parts = filePath.split('/');
+  return parts[parts.length - 1] || filePath;
+}
 
 export interface CommandPaletteProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  query: string;
+  onQueryChange: (query: string) => void;
+  results: SearchResult[];
+  selectedIndex: number;
+  onSelectedIndexChange: (index: number) => void;
+  onSelectResult: (result: SearchResult) => void;
 }
 
-interface SearchResult {
-  type: 'file' | 'folder' | 'symbol' | 'command'
-  title: string
-  subtitle?: string
-  icon: React.ElementType
-  shortcut?: string
-}
+export function CommandPalette({
+  open,
+  onOpenChange,
+  query,
+  onQueryChange,
+  results,
+  selectedIndex,
+  onSelectedIndexChange,
+  onSelectResult,
+}: CommandPaletteProps) {
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-const mockResults: SearchResult[] = [
-  { type: 'file', title: 'AuthService.ts', subtitle: 'src/services', icon: File },
-  { type: 'file', title: 'UserService.ts', subtitle: 'src/services', icon: File },
-  { type: 'folder', title: 'components', subtitle: 'src', icon: Folder },
-  { type: 'symbol', title: 'handleCallback', subtitle: 'function in AuthService.ts', icon: Hash },
-  { type: 'symbol', title: 'User', subtitle: 'interface in types.ts', icon: Hash },
-  { type: 'command', title: 'Open Settings', subtitle: 'Command', icon: Command, shortcut: '⌘,' },
-  { type: 'command', title: 'Toggle Terminal', subtitle: 'Command', icon: Command, shortcut: '⌃`' },
-]
-
-export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
-  const [query, setQuery] = React.useState('')
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
-  const inputRef = React.useRef<HTMLInputElement>(null)
-
+  // Auto-focus input when opened
   React.useEffect(() => {
     if (open && inputRef.current) {
-      inputRef.current.focus()
+      inputRef.current.focus();
+      inputRef.current.select();
     }
-  }, [open])
+  }, [open]);
 
+  // Keyboard navigation
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!open) return
+      if (!open) return;
 
       if (e.key === 'Escape') {
-        onOpenChange(false)
-        setQuery('')
-        setSelectedIndex(0)
+        e.preventDefault();
+        onOpenChange(false);
       } else if (e.key === 'ArrowDown') {
-        e.preventDefault()
-        setSelectedIndex((prev) => (prev + 1) % mockResults.length)
+        e.preventDefault();
+        onSelectedIndexChange(Math.min(selectedIndex + 1, results.length - 1));
       } else if (e.key === 'ArrowUp') {
-        e.preventDefault()
-        setSelectedIndex((prev) => (prev - 1 + mockResults.length) % mockResults.length)
+        e.preventDefault();
+        onSelectedIndexChange(Math.max(selectedIndex - 1, 0));
       } else if (e.key === 'Enter') {
-        e.preventDefault()
-        // Handle selection
-        onOpenChange(false)
-        setQuery('')
-        setSelectedIndex(0)
+        e.preventDefault();
+        if (results.length > 0) {
+          onSelectResult(results[selectedIndex]);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [open, selectedIndex, results, onOpenChange, onSelectedIndexChange, onSelectResult]);
+
+  // Get icon for result type
+  const getIcon = (result: SearchResult) => {
+    if (result.type === 'file') {
+      const ext = result.filePath.includes('.') ? '.' + result.filePath.split('.').pop() : '';
+
+      switch (ext.toLowerCase()) {
+        case '.tsx':
+        case '.vue':
+          return CodeXml;
+        case '.ts':
+        case '.js':
+        case '.jsx':
+          return SquareFunction;
+        default:
+          return File;
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [open, onOpenChange])
+    if (result.type === 'folder') {
+      return Folder;
+    }
 
-  if (!open) return null
+    // Symbol icons
+    if (result.nodeType === 'usage') {
+      return Eye;
+    }
+
+    if (result.isExported) {
+      return Upload;
+    }
+
+    switch (result.nodeType) {
+      case 'pure-function':
+      case 'function':
+        return Code2;
+      case 'state-ref':
+      case 'ref':
+        return Database;
+      case 'computed':
+        return Calculator;
+      default:
+        return Code2;
+    }
+  };
+
+  // Get icon color for result type
+  const getIconColor = (result: SearchResult, isSelected: boolean) => {
+    if (isSelected) return 'text-warm-300';
+
+    if (result.type === 'file') {
+      const ext = result.filePath.includes('.') ? '.' + result.filePath.split('.').pop() : '';
+
+      switch (ext.toLowerCase()) {
+        case '.tsx':
+        case '.vue':
+          return 'text-blue-400';
+        case '.ts':
+        case '.js':
+        case '.jsx':
+          return 'text-emerald-400';
+        default:
+          return 'text-blue-400';
+      }
+    }
+
+    if (result.type === 'folder') {
+      return 'text-yellow-400';
+    }
+
+    // Symbol colors
+    if (result.nodeType === 'usage') {
+      return 'text-slate-400';
+    }
+
+    if (result.isExported) {
+      return 'text-orange-400';
+    }
+
+    switch (result.nodeType) {
+      case 'pure-function':
+      case 'function':
+        return 'text-emerald-400';
+      case 'state-ref':
+      case 'ref':
+        return 'text-emerald-500';
+      case 'computed':
+        return 'text-teal-400';
+      default:
+        return 'text-emerald-400';
+    }
+  };
+
+  // Highlight matched text based on fuzzy match indices (only if selected)
+  const highlightText = (text: string, key: string, result: SearchResult, isSelected: boolean) => {
+    // Only show highlights when this item is selected
+    if (!isSelected) {
+      return <span>{text}</span>;
+    }
+
+    const match = result.matches?.find((m) => m.key === key);
+    if (!match || !match.indices.length) {
+      return <span>{text}</span>;
+    }
+
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+
+    // Sort indices by start position
+    const sortedIndices = [...match.indices].sort((a, b) => a[0] - b[0]);
+
+    sortedIndices.forEach(([start, end], idx) => {
+      // Add non-highlighted part
+      if (start > lastIndex) {
+        parts.push(<span key={`text-${idx}`}>{text.slice(lastIndex, start)}</span>);
+      }
+      // Add highlighted part
+      parts.push(
+        <span key={`match-${idx}`} className="text-warm-300">
+          {text.slice(start, end + 1)}
+        </span>
+      );
+      lastIndex = end + 1;
+    });
+
+    // Add remaining text
+    if (lastIndex < text.length) {
+      parts.push(<span key="text-end">{text.slice(lastIndex)}</span>);
+    }
+
+    return <>{parts}</>;
+  };
+
+  // Render result subtitle
+  const renderSubtitle = (result: SearchResult, isSelected: boolean) => {
+    if (result.type === 'file' || result.type === 'folder') {
+      return highlightText(result.filePath, 'filePath', result, isSelected);
+    }
+
+    // For symbols: show code snippet if available
+    if (result.codeSnippet) {
+      const snippet = result.codeSnippet;
+      const symbolName = result.name;
+      const index = snippet.indexOf(symbolName);
+
+      if (index === -1) {
+        return <span>{snippet}</span>;
+      }
+
+      return (
+        <>
+          <span>{snippet.slice(0, index)}</span>
+          <span className={isSelected ? 'text-warm-300 font-semibold' : 'text-text-secondary'}>
+            {highlightText(symbolName, 'name', result, isSelected)}
+          </span>
+          <span>{snippet.slice(index + symbolName.length)}</span>
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  // Render location for symbols
+  const renderLocation = (result: SearchResult) => {
+    if (result.type === 'symbol') {
+      const fileName = getFileName(result.filePath);
+      return (
+        <span className="text-2xs text-text-muted flex-shrink-0">
+          {fileName}
+          {result.lineNumber && `:${result.lineNumber}`}
+        </span>
+      );
+    }
+    return null;
+  };
+
+  if (!open) return null;
 
   return (
     <>
       {/* Backdrop */}
       <div
         className="fixed inset-0 z-50 bg-bg-overlay backdrop-blur-sm"
-        onClick={() => {
-          onOpenChange(false)
-          setQuery('')
-          setSelectedIndex(0)
-        }}
+        onClick={() => onOpenChange(false)}
       />
 
       {/* Command Palette */}
-      <div className="fixed left-1/2 top-[15%] z-50 w-full max-w-xl -translate-x-1/2">
+      <div className="fixed left-1/2 top-[15%] z-50 w-full max-w-3xl -translate-x-1/2">
         <div className="mx-4 rounded-lg border border-border-active bg-bg-elevated shadow-xl">
           {/* Search Input */}
-          <div className="flex items-center gap-2 border-b border-border-DEFAULT px-3 py-2">
+          <div className="flex items-center gap-2 border-b border-border-DEFAULT px-3 py-1.5">
             <Search size={16} className="text-warm-300 shrink-0" strokeWidth={1.5} />
             <input
               ref={inputRef}
               type="text"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search files, symbols, and commands..."
+              onChange={(e) => onQueryChange(e.target.value)}
+              placeholder="Search files, symbols, and folders..."
               className="flex-1 bg-transparent text-sm text-text-primary outline-none placeholder:text-text-muted"
             />
             <kbd className="rounded border border-border-DEFAULT bg-bg-surface px-1.5 py-0.5 text-2xs text-text-muted">
@@ -97,61 +340,82 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
           </div>
 
           {/* Results */}
-          <div className="max-h-80 overflow-y-auto p-1.5">
-            {mockResults.map((result, index) => {
-              const Icon = result.icon
-              return (
-                <div
-                  key={index}
-                  className={cn(
-                    'group flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 transition-all',
-                    selectedIndex === index
-                      ? 'bg-warm-glow/30 border border-warm-300/20'
-                      : 'border border-transparent hover:bg-white/5'
-                  )}
-                  onClick={() => {
-                    onOpenChange(false)
-                    setQuery('')
-                    setSelectedIndex(0)
-                  }}
-                  onMouseEnter={() => setSelectedIndex(index)}
-                >
+          <div className="max-h-[500px] overflow-y-auto p-1">
+            {results.length === 0 ? (
+              <div className="px-4 py-8 text-center text-text-secondary text-xs">
+                No results found
+              </div>
+            ) : (
+              results.map((result, index) => {
+                const Icon = getIcon(result);
+                const isSelected = index === selectedIndex;
+
+                return (
                   <div
+                    key={result.id}
                     className={cn(
-                      'flex h-6 w-6 shrink-0 items-center justify-center rounded',
-                      selectedIndex === index
-                        ? 'bg-warm-glow/30 text-warm-300'
-                        : 'bg-bg-surface text-text-tertiary group-hover:text-text-secondary'
+                      'group flex cursor-pointer items-center gap-2 rounded-md px-2 py-1 transition-all',
+                      isSelected
+                        ? 'bg-warm-glow/30 border border-warm-300/20'
+                        : 'border border-transparent hover:bg-white/5'
                     )}
+                    onClick={() => onSelectResult(result)}
+                    onMouseEnter={() => onSelectedIndexChange(index)}
                   >
-                    <Icon size={12} strokeWidth={1.5} />
-                  </div>
-                  <div className="flex-1 min-w-0 flex items-center gap-2">
-                    <span
+                    <div
                       className={cn(
-                        'text-sm truncate',
-                        selectedIndex === index ? 'text-text-primary' : 'text-text-secondary'
+                        'flex h-5 w-5 shrink-0 items-center justify-center rounded',
+                        isSelected
+                          ? 'bg-warm-glow/30'
+                          : 'bg-bg-surface group-hover:bg-bg-base'
                       )}
                     >
-                      {result.title}
-                    </span>
-                    {result.subtitle && (
-                      <span className="text-2xs text-text-muted truncate">· {result.subtitle}</span>
+                      <Icon size={11} strokeWidth={1.5} className={getIconColor(result, isSelected)} />
+                    </div>
+
+                    {/* Content */}
+                    {result.type === 'file' || result.type === 'folder' ? (
+                      // FILE/FOLDER: Name → full path
+                      <>
+                        <div className="flex-1 min-w-0 flex items-center gap-2">
+                          <span
+                            className={cn(
+                              'text-sm font-semibold truncate',
+                              isSelected ? 'text-text-primary' : 'text-text-secondary'
+                            )}
+                          >
+                            {highlightText(result.name, 'name', result, isSelected)}
+                          </span>
+                        </div>
+                        <span className="text-2xs text-text-muted truncate">
+                          {renderSubtitle(result, isSelected)}
+                        </span>
+                      </>
+                    ) : (
+                      // SYMBOL: Code snippet with symbol name highlighted
+                      <>
+                        <div className="flex-1 min-w-0 text-2xs text-text-muted truncate">
+                          {renderSubtitle(result, isSelected) || (
+                            <span className={isSelected ? 'text-warm-300 font-semibold' : 'text-text-secondary'}>
+                              {highlightText(result.name, 'name', result, isSelected)}
+                            </span>
+                          )}
+                        </div>
+                        {renderLocation(result)}
+                      </>
+                    )}
+
+                    {isSelected && (
+                      <CornerDownLeft size={12} className="shrink-0 text-text-muted" />
                     )}
                   </div>
-                  {result.shortcut && (
-                    <div className="shrink-0 text-2xs text-text-muted">{result.shortcut}</div>
-                  )}
-                  {selectedIndex === index && (
-                    <CornerDownLeft size={12} className="shrink-0 text-text-muted" />
-                  )}
-                </div>
-              )
-            })}
+                );
+              })
+            )}
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between border-t border-border-DEFAULT px-3 py-1.5 text-2xs text-text-muted">
+          <div className="flex items-center justify-between border-t border-border-DEFAULT px-3 py-1 text-2xs text-text-muted">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-1">
                 <kbd className="rounded border border-border-DEFAULT bg-bg-surface px-1 py-0.5">↑↓</kbd>
@@ -163,11 +427,11 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
               </div>
             </div>
             <div className="flex items-center gap-1 text-text-faint">
-              <span>⌘K</span>
+              <span>Shift+Shift</span>
             </div>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }

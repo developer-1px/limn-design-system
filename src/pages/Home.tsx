@@ -4,7 +4,8 @@ import { TitleBar } from '@/components/ide/TitleBar'
 import { ActivityBar, ActivityBarItem } from '@/components/ide/ActivityBar'
 import { StatusBar } from '@/components/ide/StatusBar'
 import { TabBar, Tab } from '@/components/ide/TabBar'
-import { Sidebar, FileTreeItem } from '@/components/ide/Sidebar'
+import { Sidebar } from '@/components/ide/Sidebar'
+import { FileTreeItem } from '@/components/ide/FileTreeItem'
 import { SearchPanel } from '@/components/ide/SearchPanel'
 import { GitPanel } from '@/components/ide/GitPanel'
 import { TerminalPanel } from '@/components/ide/TerminalPanel'
@@ -59,11 +60,13 @@ export default function Home() {
       />
 
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-6xl px-12 py-16 space-y-16">
+        <div className="mx-auto max-w-6xl px-12 pt-32 space-y-16">
           {/* Hero Section */}
           <MainHero />
+        </div>
 
-          {/* Component Showcase - 4 Column Grid */}
+        {/* Component Showcase - Wide Section */}
+        <div className="py-16">
           <MainSection
             variant="wide"
             label="Get Started"
@@ -179,7 +182,10 @@ export default function Home() {
               </div>
             </div>
           </MainSection>
+        </div>
 
+        {/* Other sections */}
+        <div className="mx-auto max-w-6xl px-12 space-y-16 pb-16">
           {/* Quick Navigation */}
           <MainSection
             label="Explore"
@@ -275,7 +281,7 @@ export default function Home() {
               <Card className="group transition-all duration-500 hover:border-border-warm cursor-default">
                 <CardHeader>
                   <div className="mb-4 transition-opacity duration-500 group-hover:opacity-100" style={{ opacity: 0.8 }}>
-                    <Indicator variant="active" />
+                    <Indicator variant="working" />
                   </div>
                   <CardTitle className="text-base mb-2 transition-colors duration-500 group-hover:text-warm-300">Active States</CardTitle>
                   <CardDescription className="text-xs leading-relaxed">

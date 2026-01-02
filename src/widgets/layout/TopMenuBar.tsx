@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-import { Home as HomeIcon, Layout, Code, MessageSquare, Package, Palette } from 'lucide-react'
+import { Home as HomeIcon, Layout, Code, MessageSquare, Package, Palette, Boxes } from 'lucide-react'
 
 interface TopMenuBarProps {
   autoHide?: boolean
@@ -8,32 +8,35 @@ interface TopMenuBarProps {
 
 // Pure light point logo component
 const LimnLogo = ({ size = 28 }: { size?: number }) => (
-  <div className="relative flex items-center gap-2">
-    {/* Glow */}
-    <div
-      className="absolute"
-      style={{
-        width: size * 0.9,
-        height: size * 0.9,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(255,180,120,0.25) 0%, transparent 70%)',
-        top: '50%',
-        left: 0,
-        transform: 'translateY(-50%)',
-        filter: `blur(${size * 0.15}px)`,
-      }}
-    />
-    {/* Core light point */}
-    <div
-      className="relative"
-      style={{
-        width: size * 0.3,
-        height: size * 0.3,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, #fff 0%, #ffeedd 50%, #ffcc99 100%)',
-        boxShadow: `0 0 ${size * 0.4}px rgba(255,200,150,0.6)`,
-      }}
-    />
+  <div className="flex items-center gap-2">
+    {/* Light point with glow */}
+    <div className="relative flex items-center justify-center" style={{ width: size * 0.3, height: size * 0.3 }}>
+      {/* Glow */}
+      <div
+        className="absolute"
+        style={{
+          width: size * 0.9,
+          height: size * 0.9,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,180,120,0.25) 0%, transparent 70%)',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          filter: `blur(${size * 0.15}px)`,
+        }}
+      />
+      {/* Core light point */}
+      <div
+        className="relative"
+        style={{
+          width: size * 0.3,
+          height: size * 0.3,
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, #fff 0%, #ffeedd 50%, #ffcc99 100%)',
+          boxShadow: `0 0 ${size * 0.4}px rgba(255,200,150,0.6)`,
+        }}
+      />
+    </div>
     <span
       className="text-xs font-light tracking-[0.3em]"
       style={{
@@ -71,10 +74,10 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
 
   const menuItems = [
     { path: '/', label: 'Home', icon: HomeIcon },
-    { path: '/samples/style-guide', label: 'Tokens', icon: Palette },
+    { path: '/tokens', label: 'Tokens', icon: Palette },
+    { path: '/primitives', label: 'Primitives', icon: Boxes },
     { path: '/components', label: 'Components', icon: Package },
     { path: '/ide', label: 'IDE', icon: Layout },
-    { path: '/chat', label: 'Chat', icon: MessageSquare },
   ]
 
   return (
@@ -84,7 +87,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
       }`}
     >
       <div
-        className="h-[var(--limn-titlebar-height)] border-b flex items-center justify-center px-4"
+        className="h-[var(--limn-titlebar-height)] border-b flex items-center px-4"
         style={{
           background: 'rgba(10,10,16,0.95)',
           backdropFilter: 'blur(20px)',
@@ -93,12 +96,12 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
         }}
       >
         {/* Logo - Left */}
-        <div className="absolute left-4">
+        <div className="flex-none">
           <LimnLogo size={24} />
         </div>
 
         {/* Menu Items - Centered */}
-        <div className="flex items-center gap-1">
+        <div className="flex-1 flex items-center justify-center gap-1">
           {menuItems.map(({ path, label, icon: Icon }) => {
             const isActive = location.pathname === path ||
                             (path === '/samples/style-guide' && location.pathname.startsWith('/samples'))
@@ -122,6 +125,9 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
             )
           })}
         </div>
+
+        {/* Right spacer - same width as logo for perfect centering */}
+        <div className="flex-none" style={{ width: '100px' }} />
       </div>
     </div>
   )
