@@ -85,7 +85,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
       }`}
     >
       <div
-        className="h-[var(--limn-titlebar-height)] border-b flex items-center justify-center px-4"
+        className="h-[var(--limn-titlebar-height)] border-b flex items-center px-4"
         style={{
           background: 'rgba(10,10,16,0.95)',
           backdropFilter: 'blur(20px)',
@@ -94,12 +94,12 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
         }}
       >
         {/* Logo - Left */}
-        <div className="absolute left-4">
+        <div className="flex-none">
           <LimnLogo size={24} />
         </div>
 
         {/* Menu Items - Centered */}
-        <div className="flex items-center gap-1">
+        <div className="flex-1 flex items-center justify-center gap-1">
           {menuItems.map(({ path, label, icon: Icon }) => {
             const isActive = location.pathname === path ||
                             (path === '/samples/style-guide' && location.pathname.startsWith('/samples'))
@@ -123,6 +123,9 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
             )
           })}
         </div>
+
+        {/* Right spacer - same width as logo for perfect centering */}
+        <div className="flex-none" style={{ width: '100px' }} />
       </div>
     </div>
   )
