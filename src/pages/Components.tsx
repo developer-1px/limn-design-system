@@ -136,7 +136,7 @@ export default function Components() {
   }
 
   return (
-    <div className="h-screen bg-bg-deep flex">
+    <div className="h-screen bg-bg-deep flex pt-[var(--limn-titlebar-height)]">
       {/* Navigation Sidebar */}
       <ComponentNav
         sections={searchQuery ? filteredSections : componentSections}

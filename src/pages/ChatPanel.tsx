@@ -50,7 +50,7 @@ export default function ChatPanel() {
   }
 
   return (
-    <div className="flex h-screen flex-col bg-bg-deep">
+    <div className="flex h-screen flex-col bg-bg-deep pt-[var(--limn-titlebar-height)]">
       {/* Header */}
       <div className="flex h-[var(--limn-titlebar-height)] items-center justify-between border-b border-border-DEFAULT bg-bg-elevated px-5">
         <div className="flex items-center gap-3">
