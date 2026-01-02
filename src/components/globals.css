@@ -20,6 +20,7 @@
   --color-warm-glow: rgb(255 180 120 / 0.15);
   --color-warm-active-bg: rgb(255 200 150 / 0.08);
   --color-warm-active-hover: rgb(255 200 150 / 0.12);
+  --color-warm-active-border: rgb(255 200 150 / 0.15);
 
   /* Text */
   --color-text-primary: rgb(255 240 220 / 0.95);
@@ -44,6 +45,10 @@
   --color-border-medium: rgb(255 255 255 / 0.1);
   --color-border-warm: rgb(255 200 150 / 0.2);
   --color-border-active: rgb(255 200 150 / 0.3);
+
+  /* Font Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Geist Mono', 'Fira Code', 'SF Mono', 'JetBrains Mono', 'Consolas', monospace;
 }
 
 @layer base {
@@ -106,10 +111,12 @@
   body {
     background-color: #0d0d12;
     color: rgb(255 250 245 / 0.7);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
     font-size: 13px;
-    line-height: 20px;
+    line-height: 1.5;
     font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   @keyframes blink {

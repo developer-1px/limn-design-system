@@ -6,6 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the **LIMN Design System** - a fully functional React + TypeScript design system implementation using shadcn/ui patterns. It includes both documentation and a working component library with a demo application.
 
+**Design Concept**: Desktop App Code Editor IDE (not a web application)
+- Native desktop application feel and behavior
+- **Typography Strategy**:
+  - Default: System fonts (SF Pro, Inter, Segoe UI) for UI labels, buttons, descriptions
+  - Monospace: `'Geist Mono', 'Fira Code', 'SF Mono'` only for code-related elements (file names, paths, status bar, keyboard shortcuts)
+- Base font size: 13px for UI, 12px for code elements
+- Non-selectable UI chrome (toolbars, menus, navigation) with `user-select: none`
+- Compact, information-dense layouts matching JetBrains/VSCode patterns
+
 ## Development Commands
 
 - `npm install` - Install dependencies
@@ -89,10 +98,14 @@ See `docs/LIMN-Icon-System.md` for complete icon mapping and usage examples.
 - **Status**: `#4ade80` (success), `#fbbf24` (warning), `#f87171` (error)
 
 ### Typography
-- **Font Stack**: System fonts (`-apple-system, BlinkMacSystemFont, 'Segoe UI'`)
-- **Mono Stack**: `'SF Mono', 'Fira Code', 'Consolas'`
-- **Scale**: 10px (label) → 20px (title)
-- **Weight**: 400 (normal), 500 (medium)
+- **Default Font Stack**: System fonts (`-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif`)
+  - Used for: UI labels, menu items, buttons, card titles, descriptions, navigation
+- **Monospace Font Stack**: Code fonts (`'Geist Mono', 'Fira Code', 'SF Mono', 'Consolas', monospace`)
+  - Used for: File names, file paths, code snippets, status bar info, keyboard shortcuts, git branches
+- **Base Size**: 13px (UI text), 12px (code elements), 10px (status bar)
+- **Scale**: 10px (status bar) → 13px (UI base) → 14px (headings) → 20px (hero)
+- **Weight**: 400 (normal), 500 (medium/active states)
+- **UI Chrome**: All toolbars, menus, navigation use `user-select: none`
 
 ### Spacing
 - **Scale**: 4px, 8px, 12px, 16px, 20px, 24px, 32px, 40px, 48px

@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { ToastProvider } from './components/ui/Toast'
-import { TopMenuBar } from './components/layout/TopMenuBar'
+import { TopMenuBar } from '@/ui/layout/TopMenuBar'
 
 // Pages
 import Home from './pages/Home'

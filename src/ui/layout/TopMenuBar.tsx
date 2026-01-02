@@ -38,6 +38,7 @@ const LimnLogo = ({ size = 28 }: { size?: number }) => (
       className="text-xs font-light tracking-[0.3em]"
       style={{
         color: 'rgba(255,250,245,0.5)',
+        userSelect: 'none',
       }}
     >
       LIMN
@@ -88,6 +89,7 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
           background: 'rgba(10,10,16,0.95)',
           backdropFilter: 'blur(20px)',
           borderColor: 'rgba(255,255,255,0.03)',
+          userSelect: 'none',
         }}
       >
         {/* Logo - Left */}
@@ -105,15 +107,16 @@ export const TopMenuBar: React.FC<TopMenuBarProps> = ({ autoHide = false }) => {
               <Link
                 key={path}
                 to={path}
-                className="flex items-center gap-1.5 px-3 h-7 rounded transition-all duration-500"
+                className="flex items-center gap-2 px-3 h-7 rounded transition-all duration-500"
                 style={{
                   background: isActive ? 'rgba(255,200,150,0.12)' : 'transparent',
                   color: isActive ? 'rgba(255,220,180,0.9)' : 'rgba(255,250,245,0.4)',
                   border: isActive ? '1px solid rgba(255,200,150,0.2)' : '1px solid transparent',
-                  fontSize: '11px',
+                  fontSize: '13px',
+                  fontWeight: isActive ? 500 : 400,
                 }}
               >
-                <Icon size={12} strokeWidth={1.5} />
+                <Icon size={14} strokeWidth={1.5} />
                 <span>{label}</span>
               </Link>
             )

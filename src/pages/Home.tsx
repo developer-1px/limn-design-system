@@ -357,28 +357,28 @@ export default function Home() {
                 title="File Explorer"
                 description="Desktop IDE file tree with multiple items"
                 preview={
-                  <div className="w-full space-y-0.5">
-                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors duration-500">
-                      <Code size={10} className="text-warm-300" strokeWidth={1.5} />
-                      <span className="text-2xs text-text-secondary">index.tsx</span>
+                  <div className="w-full space-y-0.5" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
+                      <Code size={14} className="text-warm-300" strokeWidth={1.5} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>index.tsx</span>
                     </div>
-                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded bg-warm-active-bg border border-warm-active-border">
-                      <Code size={10} className="text-warm-300" strokeWidth={1.5} />
-                      <span className="text-2xs text-text-primary">App.tsx</span>
-                      <Badge variant="warning" className="ml-auto" style={{ fontSize: '9px', padding: '1px 4px' }}>M</Badge>
+                    <div className="flex items-center gap-2 px-2 py-1 rounded bg-warm-active-bg border border-warm-active-border">
+                      <Code size={14} className="text-warm-300" strokeWidth={1.5} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255,240,220,0.95)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>App.tsx</span>
+                      <Badge variant="warning" className="ml-auto text-2xs">M</Badge>
                     </div>
-                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors duration-500">
-                      <Code size={10} className="text-warm-300" strokeWidth={1.5} />
-                      <span className="text-2xs text-text-secondary">Button.tsx</span>
+                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
+                      <Code size={14} className="text-warm-300" strokeWidth={1.5} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>Button.tsx</span>
                     </div>
-                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors duration-500">
-                      <Code size={10} className="text-warm-300" strokeWidth={1.5} />
-                      <span className="text-2xs text-text-secondary">Card.tsx</span>
-                      <Badge variant="success" className="ml-auto" style={{ fontSize: '9px', padding: '1px 4px' }}>+</Badge>
+                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
+                      <Code size={14} className="text-warm-300" strokeWidth={1.5} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>Card.tsx</span>
+                      <Badge variant="success" className="ml-auto text-2xs">+</Badge>
                     </div>
-                    <div className="flex items-center gap-1.5 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors duration-500">
-                      <Code size={10} className="text-warm-300" strokeWidth={1.5} />
-                      <span className="text-2xs text-text-secondary">utils.ts</span>
+                    <div className="flex items-center gap-2 px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
+                      <Code size={14} className="text-warm-300" strokeWidth={1.5} />
+                      <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>utils.ts</span>
                     </div>
                   </div>
                 }
@@ -389,30 +389,30 @@ export default function Home() {
                 title="Command Palette"
                 description="Quick search with multiple results"
                 preview={
-                  <div className="w-full space-y-0.5">
-                    <div className="flex items-center justify-between px-2 py-1 rounded bg-warm-active-bg border border-warm-active-border">
-                      <div className="flex items-center gap-1.5">
-                        <Package size={10} className="text-warm-300" strokeWidth={1.5} />
-                        <span className="text-2xs text-text-primary">Components</span>
+                  <div className="w-full space-y-0.5" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center justify-between px-3 py-2 rounded bg-warm-active-bg border border-warm-active-border">
+                      <div className="flex items-center gap-2.5">
+                        <Package size={14} className="text-warm-300" strokeWidth={1.5} />
+                        <span style={{ fontSize: '13px', color: 'rgba(255,240,220,0.95)', fontWeight: 500 }}>Components</span>
                       </div>
-                      <kbd className="px-1 py-0.5 rounded bg-white/5 text-text-muted" style={{ fontSize: '9px' }}>⌘K</kbd>
+                      <kbd className="px-2 py-0.5 rounded bg-white/5 text-xs" style={{ color: 'rgba(255,250,245,0.35)', fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>⌘K</kbd>
                     </div>
-                    <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
-                      <div className="flex items-center gap-1.5">
-                        <Layout size={10} className="text-text-muted" strokeWidth={1.5} />
-                        <span className="text-2xs text-text-secondary">IDE Layout</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
-                      <div className="flex items-center gap-1.5">
-                        <MessageSquare size={10} className="text-text-muted" strokeWidth={1.5} />
-                        <span className="text-2xs text-text-secondary">Chat Panel</span>
+                    <div className="flex items-center justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors duration-500">
+                      <div className="flex items-center gap-2.5">
+                        <Layout size={14} className="text-text-muted" strokeWidth={1.5} />
+                        <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)' }}>IDE Layout</span>
                       </div>
                     </div>
-                    <div className="flex items-center justify-between px-2 py-1 rounded hover:bg-white/5 transition-colors duration-500">
-                      <div className="flex items-center gap-1.5">
-                        <Code size={10} className="text-text-muted" strokeWidth={1.5} />
-                        <span className="text-2xs text-text-secondary">Editor View</span>
+                    <div className="flex items-center justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors duration-500">
+                      <div className="flex items-center gap-2.5">
+                        <MessageSquare size={14} className="text-text-muted" strokeWidth={1.5} />
+                        <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)' }}>Chat Panel</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between px-3 py-2 rounded hover:bg-white/5 transition-colors duration-500">
+                      <div className="flex items-center gap-2.5">
+                        <Code size={14} className="text-text-muted" strokeWidth={1.5} />
+                        <span style={{ fontSize: '13px', color: 'rgba(255,250,245,0.7)' }}>Editor View</span>
                       </div>
                     </div>
                   </div>
@@ -424,20 +424,20 @@ export default function Home() {
                 title="Status Bar"
                 description="Desktop app status bar with multiple sections"
                 preview={
-                  <div className="w-full">
-                    <div className="flex items-center gap-2 px-2 py-1 bg-bg-elevated border-t border-border-subtle rounded">
-                      <div className="flex items-center gap-1">
+                  <div className="w-full" style={{ userSelect: 'none' }}>
+                    <div className="flex items-center gap-3 px-3 py-1.5 bg-bg-elevated border-t border-border-subtle rounded" style={{ fontFamily: "'Geist Mono', 'Fira Code', monospace" }}>
+                      <div className="flex items-center gap-1.5">
                         <Indicator variant="active" size={6} />
-                        <span className="text-text-secondary" style={{ fontSize: '10px' }}>main</span>
+                        <span className="text-2xs text-text-secondary">main</span>
                       </div>
-                      <div className="w-px h-2.5 bg-border-subtle" />
-                      <Badge variant="error" style={{ fontSize: '9px', padding: '1px 4px' }}>2</Badge>
-                      <Badge variant="warning" style={{ fontSize: '9px', padding: '1px 4px' }}>5</Badge>
-                      <div className="w-px h-2.5 bg-border-subtle" />
-                      <span className="text-text-muted" style={{ fontSize: '10px' }}>TypeScript</span>
-                      <div className="w-px h-2.5 bg-border-subtle" />
-                      <span className="text-text-muted" style={{ fontSize: '10px' }}>UTF-8</span>
-                      <span className="text-text-muted ml-auto" style={{ fontSize: '10px' }}>Ln 42, Col 18</span>
+                      <div className="w-px h-3 bg-border-subtle" />
+                      <Badge variant="error" className="text-2xs">2</Badge>
+                      <Badge variant="warning" className="text-2xs">5</Badge>
+                      <div className="w-px h-3 bg-border-subtle" />
+                      <span className="text-2xs text-text-muted">TypeScript</span>
+                      <div className="w-px h-3 bg-border-subtle" />
+                      <span className="text-2xs text-text-muted">UTF-8</span>
+                      <span className="text-2xs text-text-muted ml-auto">Ln 42, Col 18</span>
                     </div>
                   </div>
                 }

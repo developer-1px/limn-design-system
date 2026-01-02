@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Search, File, Folder, Hash, Command, CornerDownLeft } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/components/lib/utils'
 
 export interface CommandPaletteProps {
   open: boolean
