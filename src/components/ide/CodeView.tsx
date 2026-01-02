@@ -28,8 +28,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">1</span>
           <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>import</span> {'{'} User, UserRole {'}'}{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>from</span>{' '}
+            <span className="code-keyword">import</span> {'{'} User, UserRole {'}'}{' '}
+            <span className="code-keyword">from</span>{' '}
             <span style={{ color: 'var(--code-string)' }}>'@/types/user'</span>;
           </span>
         </div>
@@ -38,8 +38,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">2</span>
           <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>import</span> {'{'} db {'}'}{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>from</span>{' '}
+            <span className="code-keyword">import</span> {'{'} db {'}'}{' '}
+            <span className="code-keyword">from</span>{' '}
             <span style={{ color: 'var(--code-string)' }}>'@/lib/database'</span>;
           </span>
         </div>
@@ -62,8 +62,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">5</span>
           <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>export</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>class</span>{' '}
+            <span className="code-keyword">export</span>{' '}
+            <span className="code-keyword">class</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>UserService</span>{' '}
             <span className="text-text-tertiary">{'{'}</span>
           </span>
@@ -73,7 +73,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className={`flex gap-3 px-4 py-0.5 ${activeLine === 5 ? 'bg-warm-glow/10 border-l-2 border-warm-300' : 'hover:bg-white/5'}`}>
           <span className="w-10 text-right text-text-faint select-none">6</span>
           <span className="text-text-secondary pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
+            <span className="code-keyword">async</span>{' '}
             <span className="code-function-highlight" style={{ color: 'var(--code-variable)' }}>createUser</span>
             <span className="text-text-tertiary">(</span>
             <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>data</span>
@@ -99,10 +99,10 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">7</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
+            <span className="code-keyword">const</span>{' '}
             <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>user</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
+            <span className="code-keyword">await</span>{' '}
             <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>
@@ -118,7 +118,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">8</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
+            <span className="code-keyword">return</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>user</span>
             <span style={{ color: 'var(--code-punctuation)' }}>;</span>
           </span>
@@ -170,7 +170,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">16</span>
           <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
+            <span className="code-keyword">async</span>{' '}
             <span style={{ color: 'var(--code-function)' }}>getUser</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>id</span>
@@ -181,7 +181,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
             <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
             <span style={{ color: 'var(--code-class)' }}>User</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>|</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>null</span>
+            <span className="code-keyword">null</span>
             <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
           </span>
@@ -191,7 +191,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">17</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
+            <span className="code-keyword">return</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>
@@ -227,7 +227,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">21</span>
           <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
+            <span className="code-keyword">async</span>{' '}
             <span style={{ color: 'var(--code-function)' }}>updateUser</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>id</span>
@@ -253,7 +253,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">22</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>try</span>{' '}
+            <span className="code-keyword">try</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
           </span>
         </div>
@@ -266,7 +266,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">24</span>
           <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
+            <span className="code-keyword">if</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>data</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
@@ -280,7 +280,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">25</span>
           <span style={{ paddingLeft: '48px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
+            <span className="code-keyword">const</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>emailRegex</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
             <span style={{ color: 'var(--code-string)' }}>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>
@@ -290,7 +290,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">26</span>
           <span style={{ paddingLeft: '48px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
+            <span className="code-keyword">if</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>(!</span>
             <span style={{ color: 'var(--code-variable)' }}>emailRegex</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
@@ -306,8 +306,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">27</span>
           <span style={{ paddingLeft: '60px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
+            <span className="code-keyword">throw</span>{' '}
+            <span className="code-keyword">new</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>Error</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-string)' }}>`Invalid email format: </span>
@@ -333,8 +333,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">31</span>
           <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
+            <span className="code-keyword">return</span>{' '}
+            <span className="code-keyword">await</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>
@@ -357,7 +357,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
           <span className="w-10 text-right text-text-faint select-none">32</span>
           <span className="pl-6">
             <span style={{ color: 'var(--code-punctuation)' }}>{'}'}</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>catch</span>{' '}
+            <span className="code-keyword">catch</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>error</span>
             <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
@@ -380,7 +380,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">34</span>
           <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
+            <span className="code-keyword">throw</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>error</span>
             <span style={{ color: 'var(--code-punctuation)' }}>;</span>
           </span>
@@ -430,7 +430,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">42</span>
           <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
+            <span className="code-keyword">async</span>{' '}
             <span style={{ color: 'var(--code-function)' }}>deleteUser</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>id</span>
@@ -439,7 +439,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
             <span style={{ color: 'var(--code-punctuation)' }}>):</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>Promise</span>
             <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
-            <span style={{ color: 'var(--code-keyword)' }}>void</span>
+            <span className="code-keyword">void</span>
             <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
           </span>
@@ -447,10 +447,10 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">43</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
+            <span className="code-keyword">const</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>now</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
+            <span className="code-keyword">new</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>Date</span>
             <span style={{ color: 'var(--code-punctuation)' }}>();</span>
           </span>
@@ -462,7 +462,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">45</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
+            <span className="code-keyword">await</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>
@@ -525,7 +525,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">53</span>
           <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
+            <span className="code-keyword">async</span>{' '}
             <span style={{ color: 'var(--code-function)' }}>getUsers</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>page</span>
@@ -546,7 +546,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">54</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
+            <span className="code-keyword">const</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>offset</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
@@ -562,7 +562,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">55</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
+            <span className="code-keyword">const</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>maxLimit</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
             <span style={{ color: 'var(--code-number)' }}>100</span>
@@ -578,7 +578,7 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">57</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
+            <span className="code-keyword">if</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-variable)' }}>limit</span>{' '}
             <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
@@ -590,8 +590,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">58</span>
           <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
+            <span className="code-keyword">throw</span>{' '}
+            <span className="code-keyword">new</span>{' '}
             <span style={{ color: 'var(--code-class)' }}>Error</span>
             <span style={{ color: 'var(--code-punctuation)' }}>(</span>
             <span style={{ color: 'var(--code-string)' }}>`Limit cannot exceed </span>
@@ -613,8 +613,8 @@ export function CodeView({ activeLine = 5, showAISuggestion = true, className }:
         <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
           <span className="w-10 text-right text-text-faint select-none">61</span>
           <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
+            <span className="code-keyword">return</span>{' '}
+            <span className="code-keyword">await</span>{' '}
             <span style={{ color: 'var(--code-variable)' }}>db</span>
             <span style={{ color: 'var(--code-punctuation)' }}>.</span>
             <span style={{ color: 'var(--code-property)' }}>user</span>

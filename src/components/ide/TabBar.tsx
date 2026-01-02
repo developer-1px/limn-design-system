@@ -18,7 +18,7 @@ const Tab = React.forwardRef<HTMLDivElement, TabProps>(
       <div
         ref={ref}
         className={cn(
-          'group flex h-[var(--limn-tab-height)] min-w-[100px] max-w-[180px] items-center gap-1.5 border-b-2 px-3 text-xs transition-all duration-normal cursor-pointer',
+          'group flex h-[var(--limn-tab-height)] min-w-[var(--limn-tab-min-width)] max-w-[var(--limn-tab-max-width)] items-center gap-1.5 border-b-2 px-3 text-xs transition-all duration-normal cursor-pointer',
           active
             ? 'border-warm-300 bg-bg-elevated text-text-primary'
             : 'border-transparent bg-transparent text-text-secondary hover:bg-white/5'
@@ -34,7 +34,7 @@ const Tab = React.forwardRef<HTMLDivElement, TabProps>(
         )}
         <span className="flex-1 truncate">{label}</span>
         <div className="flex items-center gap-0.5">
-          {dirty && <Indicator variant="warning" className="h-[5px] w-[5px]" />}
+          {dirty && <Indicator variant="warning" className="size-1" />}
           <button
             className={cn(
               'rounded p-0.5 opacity-0 hover:bg-white/10 group-hover:opacity-100',

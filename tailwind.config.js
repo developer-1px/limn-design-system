@@ -16,61 +16,65 @@ export default {
         'bg-overlay': 'rgba(0, 0, 0, 0.6)',
 
         // Warm Accent
-        warm: {
-          50: '#fffaf5',
-          100: '#fff8f0',
-          200: '#ffeedd',
-          300: '#ffcc99',
-          400: 'rgba(255, 200, 150, 0.9)',
-          500: 'rgba(255, 180, 120, 0.8)',
-          glow: 'rgba(255, 180, 120, 0.15)',
-        },
+        'warm-50': '#fffaf5',
+        'warm-100': '#fff8f0',
+        'warm-200': '#ffeedd',
+        'warm-300': '#ffcc99',
+        'warm-400': 'rgba(255, 200, 150, 0.9)',
+        'warm-500': 'rgba(255, 180, 120, 0.8)',
+        'warm-glow': 'rgba(255, 180, 120, 0.15)',
+
+        // Warm Active States (from IDEClean.tsx)
+        'warm-active-bg': 'rgba(255, 200, 150, 0.08)', // File tree active
+        'warm-active-hover': 'rgba(255, 200, 150, 0.12)', // Activity bar active
+        'warm-active-subtle': 'rgba(255, 200, 150, 0.04)', // AI chat background
+        'warm-active-border': 'rgba(255, 200, 150, 0.15)', // Subtle borders
+
+        // Gradient Stops (for bg-gradient-to-br, bg-gradient-to-r)
+        'gradient-warm-start': 'rgba(255, 200, 150, 0.3)',
+        'gradient-warm-end': 'rgba(255, 180, 120, 0.2)',
+        'gradient-warm-button-start': 'rgba(255, 200, 150, 0.15)',
+        'gradient-warm-button-end': 'rgba(255, 180, 120, 0.08)',
 
         // Text
-        text: {
-          primary: 'rgba(255, 240, 220, 0.95)',
-          secondary: 'rgba(255, 250, 245, 0.7)',
-          tertiary: 'rgba(255, 250, 245, 0.5)',
-          muted: 'rgba(255, 250, 245, 0.35)',
-          faint: 'rgba(255, 250, 245, 0.2)',
-        },
+        'text-primary': 'rgba(255, 240, 220, 0.95)',
+        'text-secondary': 'rgba(255, 250, 245, 0.7)',
+        'text-tertiary': 'rgba(255, 250, 245, 0.5)',
+        'text-muted': 'rgba(255, 250, 245, 0.35)',
+        'text-faint': 'rgba(255, 250, 245, 0.2)',
 
         // Status
-        status: {
-          success: '#4ade80',
-          'success-bg': 'rgba(74, 222, 128, 0.1)',
-          warning: '#fbbf24',
-          'warning-bg': 'rgba(251, 191, 36, 0.1)',
-          error: '#f87171',
-          'error-bg': 'rgba(248, 113, 113, 0.1)',
-          info: '#60a5fa',
-        },
+        'status-success': '#4ade80',
+        'status-success-bg': 'rgba(74, 222, 128, 0.1)',
+        'status-warning': '#fbbf24',
+        'status-warning-bg': 'rgba(251, 191, 36, 0.1)',
+        'status-error': '#f87171',
+        'status-error-bg': 'rgba(248, 113, 113, 0.1)',
+        'status-info': '#60a5fa',
 
         // Border
-        border: {
-          subtle: 'rgba(255, 255, 255, 0.04)',
-          DEFAULT: 'rgba(255, 255, 255, 0.06)',
-          light: 'rgba(255, 255, 255, 0.08)',
-          medium: 'rgba(255, 255, 255, 0.1)',
-          warm: 'rgba(255, 200, 150, 0.2)',
-          active: 'rgba(255, 200, 150, 0.3)',
-        },
+        'border-subtle': 'rgba(255, 255, 255, 0.04)',
+        'border-DEFAULT': 'rgba(255, 255, 255, 0.06)',
+        'border-light': 'rgba(255, 255, 255, 0.08)',
+        'border-medium': 'rgba(255, 255, 255, 0.1)',
+        'border-warm': 'rgba(255, 200, 150, 0.2)',
+        'border-active': 'rgba(255, 200, 150, 0.3)',
       },
       fontFamily: {
         sans: ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Noto Sans KR', 'sans-serif'],
         mono: ['SF Mono', 'Fira Code', 'JetBrains Mono', 'Consolas', 'monospace'],
       },
       fontSize: {
+        // Note: text-2xs is 10px, commonly used for labels and small UI text
         '2xs': ['10px', { lineHeight: '14px' }],
         xs: ['11px', { lineHeight: '16px' }],
         sm: ['12px', { lineHeight: '18px' }],
-        base: ['13px', { lineHeight: '20px' }],
+        base: ['13px', { lineHeight: '20px' }],  // Default IDE text size
         md: ['14px', { lineHeight: '21px' }],
-        lg: ['15px', { lineHeight: '22px' }],
+        lg: ['15px', { lineHeight: '22px' }],    // Command palette input
         xl: ['18px', { lineHeight: '26px' }],
         '2xl': ['20px', { lineHeight: '28px' }],
       },
-      // Keep Tailwind default spacing (4px scale: 1=4px, 2=8px, etc.)
       borderRadius: {
         xs: '2px',
         sm: '4px',

@@ -114,7 +114,7 @@ export function GitPanel({ className }: GitPanelProps) {
   const getStatusIcon = (status: FileChange['status']) => {
     switch (status) {
       case 'added':
-        return <Plus size={12} className="text-green-500" />
+        return <Plus size={12} className="text-status-success" />
       case 'modified':
         return <FileText size={12} className="text-yellow-500" />
       case 'deleted':
@@ -127,7 +127,7 @@ export function GitPanel({ className }: GitPanelProps) {
   const getStatusColor = (status: FileChange['status']) => {
     switch (status) {
       case 'added':
-        return 'text-green-500'
+        return 'text-status-success'
       case 'modified':
         return 'text-yellow-500'
       case 'deleted':
@@ -145,9 +145,9 @@ export function GitPanel({ className }: GitPanelProps) {
     >
       {getStatusIcon(file.status)}
       <span className={cn('text-xs flex-1 truncate', getStatusColor(file.status))}>{file.path}</span>
-      <span className="text-[10px] text-text-muted uppercase">{file.status.charAt(0)}</span>
+      <span className="text-2xs text-text-muted uppercase">{file.status.charAt(0)}</span>
       {file.staged ? (
-        <Check size={12} className="text-green-500 opacity-0 group-hover:opacity-100" />
+        <Check size={12} className="text-status-success opacity-0 group-hover:opacity-100" />
       ) : (
         <Plus size={12} className="text-text-muted opacity-0 group-hover:opacity-100" />
       )}
@@ -200,7 +200,7 @@ export function GitPanel({ className }: GitPanelProps) {
               placeholder="Commit message..."
               value={commitMessage}
               onChange={(e) => setCommitMessage(e.target.value)}
-              className="min-h-[60px] text-xs resize-none"
+              className="min-h-15 text-xs resize-none"
             />
             <div className="flex gap-2">
               <Button
@@ -244,7 +244,7 @@ export function GitPanel({ className }: GitPanelProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-5 px-1 text-[10px]"
+                  className="h-5 px-1 text-2xs"
                   onClick={(e) => {
                     e.stopPropagation()
                     unstageAll()
@@ -288,7 +288,7 @@ export function GitPanel({ className }: GitPanelProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-5 px-1 text-[10px]"
+                  className="h-5 px-1 text-2xs"
                   onClick={(e) => {
                     e.stopPropagation()
                     stageAll()
@@ -343,7 +343,7 @@ export function GitPanel({ className }: GitPanelProps) {
                       <GitCommit size={12} className="text-warm-300 mt-0.5 shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-xs text-text-primary line-clamp-2">{commit.message}</p>
-                        <div className="mt-0.5 flex items-center gap-2 text-[10px] text-text-muted">
+                        <div className="mt-0.5 flex items-center gap-2 text-2xs text-text-muted">
                           <span className="font-mono">{commit.hash}</span>
                           <span>•</span>
                           <span>{commit.author}</span>

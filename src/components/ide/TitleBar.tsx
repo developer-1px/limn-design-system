@@ -41,7 +41,7 @@ const TitleBar = React.forwardRef<HTMLDivElement, TitleBarProps>(
           )}
         </div>
 
-        <div className="w-[52px]" /> {/* Spacer for balance */}
+        <div className="w-13" /> {/* Spacer for balance */}
       </div>
     )
   }

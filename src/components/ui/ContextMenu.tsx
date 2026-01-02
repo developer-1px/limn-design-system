@@ -73,7 +73,7 @@ export function ContextMenu({ items, position, onClose }: ContextMenuProps) {
       {/* Menu */}
       <div
         ref={menuRef}
-        className="fixed z-50 min-w-[180px] rounded-lg border border-border-active bg-bg-elevated shadow-xl"
+        className="fixed z-50 min-w-45 rounded-lg border border-border-active bg-bg-elevated shadow-xl"
         style={{ left: position.x, top: position.y }}
       >
         <div className="p-1">

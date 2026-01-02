@@ -139,7 +139,7 @@ export function SearchPanel({ className }: SearchPanelProps) {
               className={cn('h-6 w-6 p-0', useRegex && 'bg-warm-300/10 text-warm-300')}
               onClick={() => setUseRegex(!useRegex)}
             >
-              <span className="text-[10px] font-mono">.*</span>
+              <span className="text-2xs font-mono">.*</span>
             </Button>
           </div>
         </div>

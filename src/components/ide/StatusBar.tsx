@@ -31,7 +31,7 @@ const StatusBar = React.forwardRef<HTMLDivElement, StatusBarProps>(
       <div
         ref={ref}
         className={cn(
-          'flex h-[var(--limn-statusbar-height)] items-center justify-between border-t px-3 text-2xs text-text-secondary',
+          'flex h-[var(--limn-statusbar-height)] items-center justify-between border-t px-3 text-xs text-text-secondary',
           'border-border-warm/30 bg-[rgba(255,200,150,0.08)]',
           className
         )}

@@ -97,7 +97,7 @@ function getSymbolIcon(kind: SymbolKind, modifiers?: SymbolModifier) {
       icon = <FunctionSquare {...iconProps} className="text-pink-400" size={14} />
       break
     case 'class':
-      icon = <Square {...iconProps} className="text-green-400" fill="currentColor" />
+      icon = <Square {...iconProps} className="text-status-success" fill="currentColor" />
       break
     case 'method':
       icon = <Circle {...iconProps} className="text-warm-300" fill="currentColor" size={8} />
@@ -113,7 +113,7 @@ function getSymbolIcon(kind: SymbolKind, modifiers?: SymbolModifier) {
       icon = <FileCode {...iconProps} className="text-text-muted" />
   }
 
-  return <div className="w-[16px] flex items-center justify-center flex-shrink-0">{icon}</div>
+  return <div className="w-4 flex items-center justify-center flex-shrink-0">{icon}</div>
 }
 
 // Get color for symbol name to match icon
@@ -133,7 +133,7 @@ function getSymbolColor(kind: SymbolKind): string {
     case 'function':
       return 'text-pink-400'
     case 'class':
-      return 'text-green-400'
+      return 'text-status-success'
     case 'method':
       return 'text-warm-300'
     case 'property':
@@ -156,7 +156,7 @@ function renderModifierIcons(modifiers?: SymbolModifier) {
   return (
     <div className="flex gap-0.5 ml-0.5">
       {modifiers.export && (
-        <ArrowUpRight size={10} className="text-green-400/80" title="export" />
+        <ArrowUpRight size={10} className="text-status-success/80" title="export" />
       )}
       {modifiers.async && (
         <Zap size={10} className="text-yellow-400/80" title="async" />
@@ -462,7 +462,8 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
         {/* Symbol Header */}
         <div
           className="flex flex-nowrap items-center gap-1 rounded px-1.5 py-0.5 text-xs hover:bg-white/5 transition-colors group overflow-hidden"
-          style={{ paddingLeft: `${indent + 6}px` }}
+          /* Base indent + half step (6px) for nested items */
+          style={{ paddingLeft: `calc(${indent}px + var(--limn-indent) / 2)` }}
         >
           {/* Expand/Collapse */}
           {hasChildren ? (
@@ -474,7 +475,7 @@ export function OutlinePanel({ defaultOpen = true, onSymbolClick }: OutlinePanel
               )}
             </button>
           ) : (
-            <div className="w-[11px] flex-shrink-0" />
+            <div className="w-3 flex-shrink-0" />
           )}
 
           {/* 1. Kind Icon (class, interface, function, const, etc) */}

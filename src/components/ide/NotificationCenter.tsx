@@ -161,8 +161,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
           <Bell size={14} />
           {unreadCount > 0 && (
             <Badge
-              variant="outline"
-              className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-[10px] bg-status-error border-status-error text-white"
+              className="absolute -top-1 -right-1 h-4 min-w-4 px-1 text-2xs bg-status-error border border-bg-elevated text-white shadow-glow-error"
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </Badge>
@@ -171,7 +170,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
       </PopoverTrigger>
 
       <PopoverContent className="w-96 p-0" align="end">
-        <div className="flex flex-col max-h-[500px]">
+        <div className="flex flex-col max-h-[var(--limn-notification-panel-height)]">
           {/* Header */}
           <div className="p-3 border-b border-border-DEFAULT">
             <div className="flex items-center justify-between">
@@ -179,7 +178,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                 <Bell size={14} className="text-text-muted" />
                 <span className="text-sm font-medium text-text-primary">Notifications</span>
                 {unreadCount > 0 && (
-                  <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
+                  <Badge className="h-5 px-1.5 text-2xs bg-warm-300/10 border border-warm-300/30 text-warm-300">
                     {unreadCount} new
                   </Badge>
                 )}
@@ -242,7 +241,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                           >
                             {notification.title}
                           </h4>
-                          <span className="text-[10px] text-text-muted whitespace-nowrap">
+                          <span className="text-2xs text-text-muted whitespace-nowrap">
                             {formatTimestamp(notification.timestamp)}
                           </span>
                         </div>

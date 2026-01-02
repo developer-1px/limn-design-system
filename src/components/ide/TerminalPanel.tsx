@@ -284,7 +284,7 @@ export function TerminalPanel({ className }: TerminalPanelProps) {
           </div>
 
           {/* Status Bar */}
-          <div className="flex items-center justify-between px-3 py-1 bg-bg-surface border-t border-border-DEFAULT text-[10px] text-text-muted">
+          <div className="flex items-center justify-between px-3 py-1 bg-bg-surface border-t border-border-DEFAULT text-2xs text-text-muted">
             <span className="flex items-center gap-2">
               <Terminal size={10} />
               <span>{activeTerminal.name}</span>

@@ -22,10 +22,10 @@ const FileTreeItem = React.forwardRef<HTMLDivElement, FileTreeItemProps>(
         className={cn(
           'group flex flex-nowrap h-[var(--limn-file-item-height)] items-center gap-1 border-l-2 px-2 text-xs transition-all duration-normal cursor-pointer',
           active
-            ? 'border-warm-300 bg-warm-glow/50 text-text-primary'
+            ? 'border-warm-300 bg-warm-active-bg text-text-primary'
             : 'border-transparent text-text-secondary hover:bg-white/5'
         )}
-        style={{ paddingLeft: `calc(8px + ${indent} * var(--limn-indent))` }}
+        style={{ paddingLeft: `calc(12px + ${indent} * var(--limn-indent))` }}
         onClick={onClick}
       >
         {isFolder && (

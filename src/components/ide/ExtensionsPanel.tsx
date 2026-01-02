@@ -155,7 +155,7 @@ export function ExtensionsPanel({ className }: ExtensionsPanelProps) {
       case 'language':
         return <Package size={14} className="text-blue-400" />
       case 'productivity':
-        return <Package size={14} className="text-green-400" />
+        return <Package size={14} className="text-status-success" />
     }
   }
 
@@ -190,8 +190,7 @@ export function ExtensionsPanel({ className }: ExtensionsPanelProps) {
             ) : (
               <Button
                 size="sm"
-                variant="outline"
-                className="h-7 text-xs"
+                                className="h-7 text-xs"
                 onClick={() => installExtension(ext.id)}
               >
                 <Download size={12} className="mr-1" />
@@ -211,11 +210,11 @@ export function ExtensionsPanel({ className }: ExtensionsPanelProps) {
               <Download size={10} />
               {formatDownloads(ext.downloads)}
             </span>
-            <Badge variant="outline" className="h-4 px-1 text-[10px]">
+            <Badge className="h-4 px-1 text-2xs border border-border-DEFAULT">
               v{ext.version}
             </Badge>
             {ext.installed && (
-              <Badge variant="outline" className="h-4 px-1 text-[10px] border-green-500/30 text-green-500">
+              <Badge className="h-4 px-1 text-2xs border border-status-success/30 text-status-success">
                 <CheckCircle2 size={8} className="mr-0.5" />
                 Installed
               </Badge>
