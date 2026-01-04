@@ -10,12 +10,14 @@ import ChatPanel from './pages/ChatPanel'
 import Components from './pages/Components'
 import Primitives from './pages/Primitives'
 import Tokens from './pages/Tokens'
+import CodeViewDemo from './pages/CodeViewDemo'
+import TerminalColors from './pages/TerminalColors'
 
 function AppContent() {
   const location = useLocation()
 
   // Full-screen layouts that use auto-hide menu
-  const fullscreenPaths = ['/ide', '/editor']
+  const fullscreenPaths = ['/ide', '/editor', '/code-demo']
   const isFullscreen = fullscreenPaths.includes(location.pathname)
 
   return (
@@ -29,6 +31,8 @@ function AppContent() {
         <Route path="/ide" element={<IDELayout />} />
         <Route path="/editor" element={<EditorView />} />
         <Route path="/chat" element={<ChatPanel />} />
+        <Route path="/code-demo" element={<CodeViewDemo />} />
+        <Route path="/terminal-colors" element={<TerminalColors />} />
       </Routes>
     </>
   )

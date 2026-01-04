@@ -19,35 +19,78 @@ This is the **LIMN Design System** - a fully functional React + TypeScript desig
 
 - `npm install` - Install dependencies
 - `npm run dev` - Start development server (http://localhost:5173)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+- `npm run build` - Build for production (TypeScript compilation + Vite build)
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint on TypeScript/TSX files
+
+## Important Architecture Notes
+
+### Tailwind CSS 4 Configuration
+This project uses **Tailwind CSS 4** with the new `@theme` directive (NOT `tailwind.config.js`). All design tokens are defined in `src/components/globals.css` using the `@theme` block. When adding new colors or tokens, edit the `@theme` section in `globals.css`, not a config file.
+
+### Component File Naming
+- **Capitalized components** (e.g., `Button.tsx`, `Card.tsx`) - Custom LIMN components
+- **Lowercase components** (e.g., `accordion.tsx`, `alert.tsx`) - shadcn/ui base components
+- **IDE components** - All PascalCase in `components/ide/`
+
+### Path Aliases
+All imports use `@/*` alias mapping to `./src/*`. The `cn()` utility is located at `@/components/lib/utils`, not `@/lib/utils`.
 
 ## Repository Structure
 
-### Documentation (`docs/`)
-- **LIMN-Design-System.md** - Base specification (v1.0): color palette, typography, spacing
-- **LIMN-Design-System-v2.md** - Complete specification (v2.0): 17 IDE components
-- **LIMN-Icon-System.md** - Icon system using Lucide React
-- **\*.jsx** - Original component showcases (reference only)
+The project follows FSD-inspired architecture with clear separation of concerns.
 
 ### Source Code (`src/`)
-- **components/ui/** - Base UI components (shadcn/ui style)
-  - `button.tsx` - Primary, ghost, outline button variants
-  - `card.tsx` - Card with active state support
-  - `input.tsx` - Input field with warm focus glow
-  - `badge.tsx` - Status badges
-  - `indicator.tsx` - Status indicator dots
-- **components/ide/** - IDE-specific components
-  - `title-bar.tsx` - Window title bar with traffic lights
-  - `activity-bar.tsx` - Vertical navigation bar
-  - `status-bar.tsx` - Bottom status bar with git info
-  - `tab-bar.tsx` - File tabs with dirty indicators
-  - `sidebar.tsx` - File tree sidebar
-- **lib/** - Utility functions (cn helper)
-- **styles/** - Global CSS with Tailwind directives
-- **App.tsx** - Demo application showcasing all components
+- **pages/** - Route-level page components
+  - `Home.tsx` - Landing page with design system overview
+  - `Tokens.tsx` - Design token showcase
+  - `Primitives.tsx` - Radix UI primitive demonstrations
+  - `Components.tsx` - Component library catalog
+  - `IDELayout.tsx` - Full IDE interface demo
+  - `EditorView.tsx` - Code editor view demo
+  - `ChatPanel.tsx` - AI chat interface demo
+- **components/ui/** - Base UI components (shadcn/ui patterns, 30+ components)
+  - Form inputs: `Button`, `Input`, `Checkbox`, `RadioGroup`, `Select`, `Switch`
+  - Layout: `Card`, `Separator`, `ScrollArea`, `CollapsibleSection`
+  - Navigation: `Tabs`, `DropdownMenu`, `ContextMenu`, `Command`, `CommandPalette`
+  - Feedback: `Badge`, `Indicator`, `Toast`, `Dialog`, `Popover`
+- **components/ide/** - IDE-specific components (18+ components)
+  - App shell: `TitleBar`, `ActivityBar`, `StatusBar`, `TabBar`, `Sidebar`
+  - Code structure: `OutlinePanel`, `OutlinePanelItem`, `DefinitionPanel`, `DefinitionPanelItem`, `CodeView`
+  - Tool panels: `SearchPanel`, `GitPanel`, `TerminalPanel`, `ExtensionsPanel`, `SettingsPanel`
+  - File system: `FileTreeItem`
+- **components/lib/** - Utility functions (`cn` helper with clsx + tailwind-merge)
+- **components/globals.css** - Global styles with Tailwind directives and LIMN design tokens
+- **components/INTEGRATION_GUIDE.md** - Important: Pure UI component philosophy and integration instructions
+- **components/deprecated/** - Legacy components (do not use for new code)
+- **shared/** - Type definitions and utilities
+  - `outlineExtractor.ts` - OutlineNode, OutlineNodeKind types for code structure
+  - `definitionExtractor.ts` - DefinitionSymbol, SymbolKind types for code definitions
+- **widgets/** - Composite UI widgets
+  - `layout/TopMenuBar.tsx` - Navigation menu with auto-hide for fullscreen layouts
+  - `ComponentLibrary/` - Component showcase navigation
+- **App.tsx** - React Router setup with route definitions
 - **main.tsx** - Application entry point
+
+### Configuration
+- **vite.config.ts** - Vite config with `@/*` alias and GitHub Pages base path (`/limn-design-system/`)
+- **tailwind.config.js** - TailwindCSS configuration
+- **components.json** - shadcn/ui CLI config (New York style, cssVariables enabled)
+
+## Application Routes
+
+The demo app uses React Router with these routes:
+- `/` - Home page with design system overview
+- `/tokens` - Design token showcase
+- `/primitives` - Radix UI primitive demonstrations
+- `/components` - Component library catalog
+- `/ide` - Full IDE layout (auto-hide menu)
+- `/editor` - Code editor view (auto-hide menu)
+- `/chat` - AI chat panel
+- `/code-demo` - CodeView component demo (auto-hide menu)
+- `/terminal-colors` - Terminal color palette
+
+**Auto-hide TopMenuBar**: Routes `/ide`, `/editor`, and `/code-demo` trigger auto-hide behavior for fullscreen immersion (see `App.tsx:20`)
 
 ## Design Philosophy
 
@@ -59,6 +102,7 @@ This is the **LIMN Design System** - a fully functional React + TypeScript desig
 - **Glow = Active** - Only active elements emit glow effects
 - **Native App Feel** - Desktop application quality, not web-app style
 - **Depth through Opacity** - Use transparency for visual hierarchy
+- **Pure UI Components** - Components are business-logic-free, receive data via props, emit events via callbacks (see `components/INTEGRATION_GUIDE.md`)
 
 ### Target Use Case
 AI-powered code editor and IDE interfaces. The design system emphasizes:
@@ -86,8 +130,6 @@ LIMN uses **Lucide React** for all icons with these specifications:
 - **Status**: Check, AlertCircle, AlertTriangle, Info, Loader2 (spinning)
 - **Semantic Zoom**: Layers (Vibe), GitBranch (Logic), Code (Syntax)
 - **AI Features**: Sparkles, MessageSquare, Wand2, BookOpen
-
-See `docs/LIMN-Icon-System.md` for complete icon mapping and usage examples.
 
 ## Design Tokens
 
@@ -175,12 +217,15 @@ This allows users to understand code at different levels of abstraction.
 
 ## Tech Stack
 
-- **React 18** with TypeScript
+- **React 19** with TypeScript 5.6
 - **Vite 6** for build tooling and HMR
-- **TailwindCSS 3** with custom LIMN theme
-- **Lucide React** for icons
+- **TailwindCSS 4** with `@tailwindcss/vite` plugin
+- **React Router DOM 7** for routing
+- **Radix UI** primitives for accessibility (14+ packages)
+- **Lucide React** for icons (v0.562)
 - **CVA** (class-variance-authority) for component variants
 - **clsx + tailwind-merge** for class name utilities
+- **cmdk** for command palette
 
 ## Component Development
 
@@ -189,7 +234,7 @@ This allows users to understand code at different levels of abstraction.
 Components follow the shadcn/ui pattern:
 
 ```tsx
-import { cn } from '@/lib/utils'
+import { cn } from '@/components/lib/utils' // Note: NOT @/lib/utils
 import { cva, type VariantProps } from 'class-variance-authority'
 
 const componentVariants = cva(
@@ -212,22 +257,34 @@ const Component = React.forwardRef<HTMLDivElement, ComponentProps>(
     return <div className={cn(componentVariants({ variant }), className)} {...props} />
   }
 )
+Component.displayName = 'Component'
+
+export { Component }
 ```
 
-### Path Alias
+**Important**:
+- Always use `@/components/lib/utils` for the `cn()` utility
+- Add `displayName` for better debugging with React DevTools
+- Export component using named export for tree-shaking
 
-The `@/*` alias maps to `./src/*` configured in:
-- `vite.config.ts`
-- `tsconfig.json`
+### Path Aliases
+
+The `@/*` alias maps to `./src/*` configured in `vite.config.ts` and `tsconfig.json`.
+
+Additional aliases from `components.json`:
+- `@/components` → component directory
+- `@/components/ui` → UI components
+- `@/components/lib/utils` → utility functions
+- `@/hooks` → custom hooks
 
 ### Using Design Tokens
 
-TailwindCSS classes use LIMN tokens:
+TailwindCSS 4 classes use LIMN tokens defined in `@theme` directive:
 
 ```tsx
-// Colors
-bg-bg-deep, bg-bg-base, bg-bg-surface
-text-text-primary, text-text-secondary, text-text-muted
+// Colors (defined in globals.css @theme block)
+bg-bg-deep, bg-bg-base, bg-bg-surface, bg-bg-elevated
+text-text-primary, text-text-secondary, text-text-muted, text-text-faint
 border-border-DEFAULT, border-border-active
 
 // Warm accent
@@ -237,20 +294,82 @@ shadow-glow-sm, shadow-glow-md, shadow-glow-lg
 // Status
 bg-status-success, text-status-error, border-status-warning
 
+// Terminal colors (16-color ANSI palette)
+text-terminal-red, bg-terminal-blue, etc.
+
 // Spacing: 1-12 (4px-48px scale)
 p-5, mt-3, gap-8
 
 // Radius
 rounded-sm, rounded-md, rounded-lg, rounded-2xl, rounded-3xl
 
-// Utilities
-.active-glow - Active state gradient + glow
-.label - Uppercase label style
+// CSS Variables (use with var())
+var(--limn-titlebar-height)  // 32px
+var(--limn-statusbar-height) // 22px
+var(--limn-indent)           // 12px
+var(--limn-file-item-height) // 24px
+
+// Custom Utility Classes (defined in globals.css)
+.active-glow  // Active state gradient + glow effect
+.label        // Uppercase label style (10px, 500 weight, letter-spacing)
 ```
 
-## Design System Versions
+**Adding New Tokens**: Edit the `@theme` block in `src/components/globals.css`, NOT `tailwind.config.js`
 
-- **v1.0** (LIMN-Design-System.md): Core tokens and basic patterns
-- **v2.0** (LIMN-Design-System-v2.md): Complete IDE component library with app shell architecture
+## Important Guidelines
 
-Always prefer v2.0 for complete implementation guidance.
+### Component Architecture
+- All components are **pure UI components** with no business logic
+- Components receive data via props and emit events via callbacks
+- No data fetching, state management, or backend integration in components
+- Refer to `src/components/INTEGRATION_GUIDE.md` for integration patterns
+
+### Deployment
+- GitHub Pages deployment configured with base path `/limn-design-system/`
+- Build outputs to `dist/` directory
+- Uses `BrowserRouter` with `basename={import.meta.env.BASE_URL}`
+
+### Code Style
+- Follow FSD (Feature-Sliced Design) architecture principles
+- Never use barrel exports (explicit imports only)
+- TypeScript strict mode enabled
+- All IDE components should use monospace fonts for code-related text
+- UI components use system fonts for labels and descriptions
+
+## Common Patterns & Gotchas
+
+### Component State Patterns
+Components use visual states defined in `globals.css`:
+- **Inactive**: Subtle backgrounds (`bg-bg-surface`), low-contrast text (`text-text-muted`)
+- **Active**: Use `.active-glow` class for warm gradient + glow effect
+- **Hover**: Slight scale transform (`hover:scale-[1.02]`) + brightened borders
+
+### Typography Usage
+```tsx
+// ❌ Wrong - Don't use generic font classes
+<span className="font-mono">index.ts</span>
+
+// ✅ Correct - Use font-geist-mono for code-related elements
+<span className="font-geist-mono text-xs">index.ts</span>
+
+// ✅ Correct - System fonts for UI labels
+<span className="label">EXPLORER</span>
+```
+
+### Icon Integration
+```tsx
+import { FileCode } from 'lucide-react'
+
+// Standard icon with LIMN sizing
+<FileCode size={14} className="text-text-secondary" strokeWidth={1.5} />
+
+// Active state icon
+<FileCode size={14} className="text-warm-300" strokeWidth={2} />
+```
+
+### Common Mistakes to Avoid
+1. **Don't modify `tailwind.config.js`** - Use `@theme` in `globals.css` instead
+2. **Don't import from `@/lib/utils`** - Use `@/components/lib/utils`
+3. **Don't add business logic to components** - Keep them pure UI (see INTEGRATION_GUIDE.md)
+4. **Don't use deprecated components** - Check `components/deprecated/` folder
+5. **Don't hardcode colors** - Always use design tokens from `@theme`

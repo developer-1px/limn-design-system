@@ -1,661 +1,294 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
+import Prism from 'prismjs'
+// Import order is important: base languages first, then extensions
+import 'prismjs/components/prism-javascript'
+import 'prismjs/components/prism-jsx'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-tsx'
+import 'prismjs/components/prism-json'
 
 export interface CodeViewProps {
-  /** Active line number (0-indexed, optional) */
+  /** Programming language for syntax highlighting */
+  language?: 'typescript' | 'tsx' | 'jsx' | 'javascript' | 'json'
+  /** Source code to display */
+  code?: string
+  /** Active line number (1-indexed, optional) */
   activeLine?: number
   /** Show AI suggestion on active line */
   showAISuggestion?: boolean
+  /** AI suggestion text */
+  suggestionText?: string
+  /** Color theme: 'warm' (default LIMN) or 'terminal' (ANSI colors) */
+  theme?: 'warm' | 'terminal'
   /** Custom className for the container */
   className?: string
 }
 
+// Complex TypeScript + React sample code
+const DEFAULT_SAMPLE_CODE = `import React, { useState, useEffect, useMemo, forwardRef, useCallback } from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Sparkles, Loader2 } from 'lucide-react'
+
+// Type definitions with generics and utility types
+interface BaseProps<T = unknown> {
+  value: T
+  onChange: (newValue: T) => void
+  disabled?: boolean
+}
+
+type Status = 'idle' | 'loading' | 'success' | 'error'
+
+interface AIAssistantProps<T extends Record<string, unknown>>
+  extends BaseProps<T>,
+    VariantProps<typeof buttonVariants> {
+  endpoint: string
+  model?: 'gpt-4' | 'claude-3' | 'gemini-pro'
+  onStreamUpdate?: (chunk: string) => void
+  fallback?: React.ReactNode
+}
+
+// Component variants using CVA
+const buttonVariants = cva(
+  'inline-flex items-center justify-center rounded-lg font-medium transition-all',
+  {
+    variants: {
+      variant: {
+        default: 'bg-warm-400 text-bg-deep hover:bg-warm-300',
+        ghost: 'hover:bg-white/5 text-text-secondary',
+        outline: 'border border-border-DEFAULT hover:border-border-warm',
+      },
+      size: {
+        sm: 'h-8 px-3 text-xs',
+        md: 'h-10 px-4 text-sm',
+        lg: 'h-12 px-6 text-base',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'md',
+    },
+  }
+)
+
+// Generic hook with complex type inference
+function useAsyncState<T>(
+  initialValue: T,
+  validator?: (value: T) => boolean
+): [T, (value: T | ((prev: T) => T)) => void, Status] {
+  const [state, setState] = useState<T>(initialValue)
+  const [status, setStatus] = useState<Status>('idle')
+
+  const handleChange = useCallback((value: T | ((prev: T) => T)) => {
+    const newValue = typeof value === 'function'
+      ? (value as (prev: T) => T)(state)
+      : value
+
+    if (validator && !validator(newValue)) {
+      setStatus('error')
+      return
+    }
+
+    setState(newValue)
+    setStatus('success')
+  }, [state, validator])
+
+  return [state, handleChange, status]
+}
+
+// ForwardRef component with generics
+export const AIAssistant = forwardRef<
+  HTMLDivElement,
+  AIAssistantProps<Record<string, unknown>>
+>(function AIAssistant(
+  {
+    value,
+    onChange,
+    disabled = false,
+    endpoint,
+    model = 'gpt-4',
+    onStreamUpdate,
+    fallback,
+    variant,
+    size,
+    ...props
+  },
+  ref
+) {
+  const [response, setResponse, status] = useAsyncState<string>('',
+    (val) => val.length < 10000
+  )
+  const abortControllerRef = useRef<AbortController | null>(null)
+
+  // Memoized computation
+  const tokenCount = useMemo(() => {
+    return response.split(/\\s+/).filter(Boolean).length
+  }, [response])
+
+  // Effect with cleanup
+  useEffect(() => {
+    if (!endpoint || disabled) return
+
+    const controller = new AbortController()
+    abortControllerRef.current = controller
+
+    async function fetchAIResponse() {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: value,
+            model,
+            stream: true
+          }),
+          signal: controller.signal,
+        })
+
+        if (!res.ok) throw new Error(\`HTTP \${res.status}\`)
+
+        const reader = res.body?.getReader()
+        const decoder = new TextDecoder()
+
+        while (reader) {
+          const { done, value: chunk } = await reader.read()
+          if (done) break
+
+          const text = decoder.decode(chunk)
+          setResponse(prev => prev + text)
+          onStreamUpdate?.(text)
+        }
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error('AI request failed:', error)
+        }
+      }
+    }
+
+    fetchAIResponse()
+
+    return () => controller.abort()
+  }, [endpoint, value, model, disabled, onStreamUpdate, setResponse])
+
+  // Conditional rendering with type guards
+  if (disabled && fallback) {
+    return <>{fallback}</>
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={buttonVariants({ variant, size })}
+      {...props}
+    >
+      {status === 'loading' && (
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+      )}
+      {status === 'success' && (
+        <Sparkles className="mr-2 h-4 w-4" />
+      )}
+      <span className="font-mono text-xs text-text-muted">
+        {tokenCount} tokens
+      </span>
+      <button
+        onClick={() => onChange(response as Record<string, unknown>)}
+        disabled={disabled || status === 'loading'}
+        className="ml-2 rounded px-2 py-1 hover:bg-warm-glow"
+      >
+        Apply
+      </button>
+    </div>
+  )
+})
+
+AIAssistant.displayName = 'AIAssistant'
+`
+
 /**
- * CodeView - A comprehensive code editor display component with syntax highlighting
+ * CodeView - Syntax-highlighted code viewer with Prism.js
  *
  * Features:
- * - 66 lines of TypeScript code with full syntax highlighting
+ * - Real syntax highlighting with Prism.js
+ * - Multiple language support (TypeScript, TSX, JSX, JavaScript, JSON)
  * - Active line highlighting with warm glow
  * - Line numbers with proper formatting
  * - Hover effects on each line
  * - AI suggestion ghost text on active line
- * - All LIMN syntax color tokens applied
+ * - LIMN design tokens for consistent theming
  */
-export function CodeView({ activeLine = 5, showAISuggestion = true, className }: CodeViewProps) {
+export function CodeView({
+  language = 'tsx',
+  code = DEFAULT_SAMPLE_CODE,
+  activeLine,
+  showAISuggestion = true,
+  suggestionText = '// AI: Consider adding error boundary here',
+  theme = 'warm',
+  className
+}: CodeViewProps) {
+  const codeRef = useRef<HTMLElement>(null)
+
+  // Highlight code when it changes
+  useEffect(() => {
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current)
+    }
+  }, [code, language])
+
+  const lines = code.split('\n')
+
+  // Apply theme class to container
+  const themeClass = theme === 'terminal' ? 'code-theme-terminal' : 'code-theme-warm'
+
   return (
-    <div className={`h-full overflow-y-auto ${className || ''}`}>
+    <div className={`h-full overflow-y-auto ${themeClass} ${className || ''}`}>
       <div className="font-mono text-xs leading-relaxed">
-        {/* Line 1 */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">1</span>
-          <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>import</span> {'{'} User, UserRole {'}'}{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>from</span>{' '}
-            <span style={{ color: 'var(--code-string)' }}>'@/types/user'</span>;
-          </span>
-        </div>
+        {lines.map((line, index) => {
+          const lineNumber = index + 1
+          const isActive = activeLine === lineNumber
 
-        {/* Line 2 */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">2</span>
-          <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>import</span> {'{'} db {'}'}{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>from</span>{' '}
-            <span style={{ color: 'var(--code-string)' }}>'@/lib/database'</span>;
-          </span>
-        </div>
-
-        {/* Line 3 - Empty */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">3</span>
-          <span />
-        </div>
-
-        {/* Line 4 - Comment */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">4</span>
-          <span style={{ color: 'var(--code-comment)' }} className="italic">
-            // User management service
-          </span>
-        </div>
-
-        {/* Line 5 - Class declaration */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">5</span>
-          <span className="text-text-secondary">
-            <span style={{ color: 'var(--code-keyword)' }}>export</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>class</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>UserService</span>{' '}
-            <span className="text-text-tertiary">{'{'}</span>
-          </span>
-        </div>
-
-        {/* Line 6 - Active line with AI suggestion */}
-        <div className={`flex gap-3 px-4 py-0.5 ${activeLine === 5 ? 'bg-warm-glow/10 border-l-2 border-warm-300' : 'hover:bg-white/5'}`}>
-          <span className="w-10 text-right text-text-faint select-none">6</span>
-          <span className="text-text-secondary pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span className="code-function-highlight" style={{ color: 'var(--code-variable)' }}>createUser</span>
-            <span className="text-text-tertiary">(</span>
-            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>data</span>
-            <span className="text-text-tertiary">:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Partial</span>
-            <span className="text-text-tertiary">{'<'}</span>
-            <span style={{ color: 'var(--code-class)' }}>User</span>
-            <span className="text-text-tertiary">{'>'}):</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Promise</span>
-            <span className="text-text-tertiary">{'<'}</span>
-            <span style={{ color: 'var(--code-class)' }}>User</span>
-            <span className="text-text-tertiary">{'>'} {'{'}</span>
-            {/* Ghost text suggestion */}
-            {showAISuggestion && activeLine === 5 && (
-              <span className="text-warm-300/40 italic ml-2">
-                // Validate email format
+          return (
+            <div
+              key={lineNumber}
+              className={`flex gap-3 px-4 py-0.5 ${
+                isActive
+                  ? 'bg-warm-glow/10 border-l-2 border-warm-300'
+                  : 'hover:bg-white/5'
+              }`}
+            >
+              {/* Line number */}
+              <span className="w-10 text-right text-text-faint select-none">
+                {lineNumber}
               </span>
-            )}
-          </span>
-        </div>
 
-        {/* Line 7-8 */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">7</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>user</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
-            <span className="code-variable-highlight" style={{ color: 'var(--code-variable)' }}>db</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span className="code-function-highlight" style={{ color: 'var(--code-variable)' }}>create</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' }'}</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">8</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>;</span>
-          </span>
-        </div>
+              {/* Code content */}
+              <pre className="flex-1 flex items-center m-0">
+                <code
+                  ref={lineNumber === 1 ? codeRef : undefined}
+                  className={`language-${language}`}
+                  style={{ display: 'none' }}
+                >
+                  {code}
+                </code>
+                <code
+                  className="text-text-secondary whitespace-pre"
+                  dangerouslySetInnerHTML={{
+                    __html: Prism.highlight(
+                      line,
+                      Prism.languages[language] || Prism.languages.typescript,
+                      language
+                    ),
+                  }}
+                />
 
-        {/* Line 9-10 - Closing brace and empty */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">9</span>
-          <span className="pl-3 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">10</span>
-          <span />
-        </div>
-
-        {/* Line 11-15 - JSDoc comment */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">11</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {'/**'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">12</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' * Retrieves a user by their unique identifier'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">13</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' * @param id - The user ID'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">14</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' * @returns User object or null if not found'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">15</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' */'}
-          </span>
-        </div>
-
-        {/* Line 16 - Method declaration */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">16</span>
-          <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span style={{ color: 'var(--code-function)' }}>getUser</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>string</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>):</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Promise</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
-            <span style={{ color: 'var(--code-class)' }}>User</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>|</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>null</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-
-        {/* Line 17-19 */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">17</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>db</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>findUnique</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>where</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>: {'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' } }'}</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">18</span>
-          <span className="pl-3 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">19</span>
-          <span />
-        </div>
-
-        {/* Line 20 - Comment */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">20</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {'// Update user with validation'}
-          </span>
-        </div>
-
-        {/* Line 21 - Method with more complex types */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">21</span>
-          <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span style={{ color: 'var(--code-function)' }}>updateUser</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>string</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Partial</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
-            <span style={{ color: 'var(--code-class)' }}>User</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>):</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Promise</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
-            <span style={{ color: 'var(--code-class)' }}>User</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-
-        {/* Line 22-24 - Try-catch with validation */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">22</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>try</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">23</span>
-          <span className="pl-9 italic" style={{ color: 'var(--code-comment)' }}>
-            {'// Validate email format if provided'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">24</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>email</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-
-        {/* Line 25-27 - Template literal and regex */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">25</span>
-          <span style={{ paddingLeft: '48px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>emailRegex</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-string)' }}>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>;</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">26</span>
-          <span style={{ paddingLeft: '48px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>(!</span>
-            <span style={{ color: 'var(--code-variable)' }}>emailRegex</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>test</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>email</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>))</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">27</span>
-          <span style={{ paddingLeft: '60px' }}>
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-string)' }}>`Invalid email format: </span>
-            <span style={{ color: 'var(--code-variable)' }}>${'{'}data.email{'}'}</span>
-            <span style={{ color: 'var(--code-string)' }}>`</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-
-        {/* Line 28-32 - Closing braces and db call */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">28</span>
-          <span style={{ paddingLeft: '48px' }} className="text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">29</span>
-          <span className="pl-9 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">30</span>
-          <span />
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">31</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>db</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>update</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>where</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>: {'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' }, '}</span>
-            <span style={{ color: 'var(--code-property)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' }'}</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-
-        {/* Line 32-35 - Catch block */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">32</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-punctuation)' }}>{'}'}</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>catch</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">33</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-variable)' }}>console</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-string)' }}>'Failed to update user:'</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">34</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>;</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">35</span>
-          <span className="pl-6 text-text-tertiary">{'}'}</span>
-        </div>
-
-        {/* Line 36-37 - Closing */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">36</span>
-          <span className="pl-3 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">37</span>
-          <span />
-        </div>
-
-        {/* Line 38-41 - Multi-line comment */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">38</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {'/*'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">39</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' * Delete user by ID'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">40</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' * Note: This performs a soft delete by setting deletedAt timestamp'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">41</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {' */'}
-          </span>
-        </div>
-
-        {/* Line 42-50 - Delete method */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">42</span>
-          <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span style={{ color: 'var(--code-function)' }}>deleteUser</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>string</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>):</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Promise</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'<'}</span>
-            <span style={{ color: 'var(--code-keyword)' }}>void</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">43</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>now</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Date</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>();</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">44</span>
-          <span />
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">45</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>db</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>update</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">46</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-property)' }}>where</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>: {'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>id</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' },'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">47</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-property)' }}>data</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>: {'{ '}</span>
-            <span style={{ color: 'var(--code-property)' }}>deletedAt</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>now</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>{' '}
-            <span style={{ color: 'var(--code-property)' }}>status</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-string)' }}>'DELETED'</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{' },'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">48</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-punctuation)' }}>{'});'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">49</span>
-          <span className="pl-3 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">50</span>
-          <span className="text-text-tertiary">{'}'}</span>
-        </div>
-
-        {/* Line 51-55 - Method with numbers */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">51</span>
-          <span />
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">52</span>
-          <span className="pl-3 italic" style={{ color: 'var(--code-comment)' }}>
-            {'// Get users with pagination'}
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">53</span>
-          <span className="pl-3">
-            <span style={{ color: 'var(--code-keyword)' }}>async</span>{' '}
-            <span style={{ color: 'var(--code-function)' }}>getUsers</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>page</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>number</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-number)' }}>1</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>limit</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>number</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-number)' }}>20</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">54</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>offset</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>page</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>-</span>{' '}
-            <span style={{ color: 'var(--code-number)' }}>1</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>*</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>limit</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>;</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">55</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>const</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>maxLimit</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>=</span>{' '}
-            <span style={{ color: 'var(--code-number)' }}>100</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>;</span>
-          </span>
-        </div>
-
-        {/* Line 56-60 - Validation */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">56</span>
-          <span />
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">57</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>if</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-variable)' }}>limit</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'>'}</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>maxLimit</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>)</span>{' '}
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">58</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-keyword)' }}>throw</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>new</span>{' '}
-            <span style={{ color: 'var(--code-class)' }}>Error</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-string)' }}>`Limit cannot exceed </span>
-            <span style={{ color: 'var(--code-variable)' }}>${'{'}maxLimit{'}'}</span>
-            <span style={{ color: 'var(--code-string)' }}>`</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>);</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">59</span>
-          <span className="pl-6 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">60</span>
-          <span />
-        </div>
-
-        {/* Line 61-66 - Query and return */}
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">61</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-keyword)' }}>return</span>{' '}
-            <span style={{ color: 'var(--code-keyword)' }}>await</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>db</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-property)' }}>user</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>.</span>
-            <span style={{ color: 'var(--code-function)' }}>findMany</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>(</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>{'{'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">62</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-property)' }}>take</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>limit</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">63</span>
-          <span className="pl-9">
-            <span style={{ color: 'var(--code-property)' }}>skip</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>:</span>{' '}
-            <span style={{ color: 'var(--code-variable)' }}>offset</span>
-            <span style={{ color: 'var(--code-punctuation)' }}>,</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">64</span>
-          <span className="pl-6">
-            <span style={{ color: 'var(--code-punctuation)' }}>{'});'}</span>
-          </span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">65</span>
-          <span className="pl-3 text-text-tertiary">{'}'}</span>
-        </div>
-        <div className="flex gap-3 px-4 py-0.5 hover:bg-white/5">
-          <span className="w-10 text-right text-text-faint select-none">66</span>
-          <span className="text-text-tertiary">{'}'}</span>
-        </div>
+                {/* AI suggestion ghost text */}
+                {isActive && showAISuggestion && line.trim() && (
+                  <span className="text-warm-300/40 italic ml-2 whitespace-nowrap">
+                    {suggestionText}
+                  </span>
+                )}
+              </pre>
+            </div>
+          )
+        })}
       </div>
     </div>
   )

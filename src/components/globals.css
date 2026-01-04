@@ -38,6 +38,54 @@
   --color-status-error-bg: rgb(248 113 113 / 0.1);
   --color-status-info: #60a5fa;
 
+  /* Terminal Colors - LIMN Warm Spectrum (ANSI 16 Color Palette) */
+
+  /* Black & White - Neutral grays with warm undertones */
+  --color-terminal-black: #1a1a20;           /* Warm deep black */
+  --color-terminal-bright-black: #3a3a45;    /* Warm gray (bright black) */
+  --color-terminal-white: #d4cfc4;           /* Warm light gray */
+  --color-terminal-bright-white: #f5f0e8;    /* Warm almost-white */
+
+  /* Red family - coral/salmon reds with warmth */
+  --color-terminal-red: #e88b7a;             /* Warm coral red */
+  --color-terminal-bright-red: #ffa595;      /* Bright salmon */
+  --color-terminal-red-glow: rgb(232 139 122 / 0.15);
+
+  /* Orange family - peachy oranges (LIMN signature) */
+  --color-terminal-orange: #ffb380;          /* Warm peach orange */
+  --color-terminal-bright-orange: #ffcc99;   /* Bright LIMN orange */
+  --color-terminal-orange-glow: rgb(255 179 128 / 0.15);
+
+  /* Yellow family - golden yellows */
+  --color-terminal-yellow: #e8c07a;          /* Warm golden yellow */
+  --color-terminal-bright-yellow: #ffd699;   /* Bright champagne */
+  --color-terminal-yellow-glow: rgb(232 192 122 / 0.15);
+
+  /* Green family - olive/sage greens with warmth */
+  --color-terminal-green: #a8c088;           /* Warm olive green */
+  --color-terminal-bright-green: #c4d8a4;    /* Bright sage */
+  --color-terminal-green-glow: rgb(168 192 136 / 0.15);
+
+  /* Cyan family - teal with peachy undertones */
+  --color-terminal-cyan: #7dc4c4;            /* Warm teal-cyan */
+  --color-terminal-bright-cyan: #9ee0d8;     /* Bright peachy-cyan */
+  --color-terminal-cyan-glow: rgb(125 196 196 / 0.15);
+
+  /* Blue family - warm blues with violet undertones */
+  --color-terminal-blue: #8ba8d8;            /* Warm periwinkle blue */
+  --color-terminal-bright-blue: #a8c4f0;     /* Bright lavender-blue */
+  --color-terminal-blue-glow: rgb(139 168 216 / 0.15);
+
+  /* Magenta family - dusty rose/mauve */
+  --color-terminal-magenta: #d8a8c4;         /* Warm dusty rose */
+  --color-terminal-bright-magenta: #f0c4d8;  /* Bright rose-pink */
+  --color-terminal-magenta-glow: rgb(216 168 196 / 0.15);
+
+  /* Purple family - warm lavender/plum */
+  --color-terminal-purple: #b8a8d8;          /* Warm lavender */
+  --color-terminal-bright-purple: #d4c4f0;   /* Bright pale lavender */
+  --color-terminal-purple-glow: rgb(184 168 216 / 0.15);
+
   /* Border */
   --color-border-subtle: rgb(255 255 255 / 0.04);
   --color-border-DEFAULT: rgb(255 255 255 / 0.06);
@@ -90,18 +138,87 @@
     --limn-code-indent-1: 48px;
     --limn-code-indent-2: 60px;
 
-    /* Code syntax colors */
+    /* Code syntax colors - LIMN Warm Dark Theme */
+    /* Keywords & Control Flow - Warmest orange (highest priority) */
     --code-keyword: #ffcc99;
+    --code-control: #ffb380;
+    --code-operator: #ffc999;
+
+    /* Functions & Methods - Warm yellow-orange */
     --code-function: #ffd699;
+    --code-method: #ffd699;
+
+    /* Classes, Types & Interfaces - Soft warm beige */
     --code-class: #e5c07b;
-    --code-variable: #e2e8f0;
+    --code-type: #d9ba8f;
+    --code-interface: #d9ba8f;
+    --code-enum: #d9ba8f;
+
+    /* Variables & Parameters - Warm cream */
+    --code-variable: #f5f0e8;
+    --code-parameter: #e8e0d5;
+    --code-const: #fff8f0;
+
+    /* Strings & Templates - Warm tan */
     --code-string: #d4a574;
-    --code-number: #cbd5e1;
+    --code-template: #d9ad7f;
+    --code-regex: #d9ad7f;
+
+    /* Numbers & Booleans - Soft warm white */
+    --code-number: #e8d5c4;
+    --code-boolean: #e8d5c4;
+    --code-null: #d4c4b8;
+
+    /* Comments & Documentation - Muted warm */
     --code-comment: rgb(255 250 245 / 0.35);
-    --code-property: #d4d4d8;
+    --code-doc-comment: rgb(255 250 245 / 0.45);
+
+    /* Properties & Attributes - Medium warm */
+    --code-property: #ddd5cc;
+    --code-attribute: #d9d0c7;
+
+    /* Tags & JSX - Warm orange-peach */
     --code-tag: #ffb366;
-    --code-attribute: #cbd5e1;
+    --code-tag-bracket: #ff9d52;
+    --code-jsx-tag: #ffb366;
+
+    /* Punctuation & Delimiters - Subtle warm */
     --code-punctuation: rgb(255 250 245 / 0.6);
+    --code-bracket: rgb(255 240 230 / 0.7);
+    --code-delimiter: rgb(255 245 235 / 0.55);
+
+    /* Special tokens */
+    --code-decorator: #ffad70;
+    --code-annotation: #ffad70;
+    --code-generic: #e5c07b;
+    --code-namespace: #d9ba8f;
+    --code-builtin: #ffd699;
+
+    /* Terminal-inspired tokens for code */
+    --code-import: var(--color-terminal-cyan);           /* import statements */
+    --code-export: var(--color-terminal-cyan);           /* export statements */
+    --code-module: var(--color-terminal-bright-cyan);    /* module names */
+    --code-path: var(--color-terminal-bright-cyan);      /* file paths in imports */
+    --code-env: var(--color-terminal-green);             /* environment variables */
+    --code-meta: var(--color-terminal-blue);             /* metadata, decorators */
+
+    /* Alternative Terminal Theme for Code - Vibrant ANSI Colors */
+    --code-terminal-keyword: var(--color-terminal-purple);           /* keywords */
+    --code-terminal-control: var(--color-terminal-bright-purple);    /* control flow */
+    --code-terminal-function: var(--color-terminal-blue);            /* functions */
+    --code-terminal-class: var(--color-terminal-bright-blue);        /* classes */
+    --code-terminal-type: var(--color-terminal-cyan);                /* types */
+    --code-terminal-variable: var(--color-terminal-bright-white);    /* variables */
+    --code-terminal-const: var(--color-terminal-magenta);            /* constants */
+    --code-terminal-string: var(--color-terminal-yellow);            /* strings */
+    --code-terminal-number: var(--color-terminal-bright-magenta);    /* numbers */
+    --code-terminal-boolean: var(--color-terminal-bright-magenta);   /* booleans */
+    --code-terminal-comment: var(--color-terminal-bright-black);     /* comments */
+    --code-terminal-operator: var(--color-terminal-orange);          /* operators */
+    --code-terminal-punctuation: var(--color-terminal-white);        /* punctuation */
+    --code-terminal-property: var(--color-terminal-cyan);            /* properties */
+    --code-terminal-tag: var(--color-terminal-red);                  /* jsx tags */
+    --code-terminal-attribute: var(--color-terminal-bright-yellow);  /* attributes */
   }
 
   * {
@@ -117,6 +234,19 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Reset pre and code tags for code viewer */
+  pre, code {
+    font-family: var(--font-mono);
+    margin: 0;
+    padding: 0;
+  }
+
+  pre code {
+    background: transparent;
+    border: none;
+    border-radius: 0;
   }
 
   @keyframes blink {
@@ -161,7 +291,71 @@
   border: 1px solid rgb(251 191 36 / 0.4);
 }
 
-/* Syntax highlighting utility classes */
+/* Prism.js LIMN Theme - Token class mappings */
+/* Keywords & Control */
+.token.keyword { color: var(--code-keyword); font-weight: 500; }
+.token.control { color: var(--code-control); }
+.token.operator { color: var(--code-operator); }
+
+/* Functions & Methods */
+.token.function { color: var(--code-function); }
+.token.method { color: var(--code-method); }
+.token.builtin { color: var(--code-builtin); }
+
+/* Classes, Types & Interfaces */
+.token.class-name { color: var(--code-class); }
+.token.type { color: var(--code-type); }
+.token.interface { color: var(--code-interface); }
+.token.enum { color: var(--code-enum); }
+
+/* Variables & Parameters */
+.token.variable { color: var(--code-variable); }
+.token.parameter { color: var(--code-parameter); }
+.token.constant { color: var(--code-const); }
+
+/* Strings & Templates */
+.token.string { color: var(--code-string); }
+.token.template-string { color: var(--code-template); }
+.token.regex { color: var(--code-regex); }
+
+/* Numbers & Booleans */
+.token.number { color: var(--code-number); }
+.token.boolean { color: var(--code-boolean); }
+.token.null { color: var(--code-null); }
+.token.undefined { color: var(--code-null); }
+
+/* Comments */
+.token.comment { color: var(--code-comment); font-style: italic; }
+.token.doc-comment { color: var(--code-doc-comment); font-style: italic; }
+.token.prolog { color: var(--code-comment); font-style: italic; }
+
+/* Properties & Attributes */
+.token.property { color: var(--code-property); }
+.token.attr-name { color: var(--code-attribute); }
+.token.attr-value { color: var(--code-string); }
+
+/* Tags & JSX */
+.token.tag { color: var(--code-tag); }
+.token.tag .token.punctuation { color: var(--code-tag-bracket); }
+.token.tag .token.attr-name { color: var(--code-attribute); }
+
+/* Punctuation & Delimiters */
+.token.punctuation { color: var(--code-punctuation); }
+.token.delimiter { color: var(--code-delimiter); }
+.token.bracket { color: var(--code-bracket); }
+
+/* Special tokens */
+.token.decorator { color: var(--code-decorator); }
+.token.annotation { color: var(--code-annotation); }
+.token.generic { color: var(--code-generic); }
+.token.namespace { color: var(--code-namespace); }
+.token.imports { color: var(--code-keyword); }
+
+/* TypeScript specific */
+.token.type-annotation { color: var(--code-type); }
+.token.return-type { color: var(--code-type); }
+
+/* Legacy utility classes (for backward compatibility) */
 .code-keyword { color: var(--code-keyword); }
 .code-function { color: var(--code-function); }
 .code-class { color: var(--code-class); }
@@ -173,3 +367,39 @@
 .code-tag { color: var(--code-tag); }
 .code-attribute { color: var(--code-attribute); }
 .code-punctuation { color: var(--code-punctuation); }
+
+/* Terminal Theme Override - Vibrant ANSI Colors */
+.code-theme-terminal .token.keyword { color: var(--code-terminal-keyword) !important; font-weight: 500; }
+.code-theme-terminal .token.control { color: var(--code-terminal-control) !important; }
+.code-theme-terminal .token.operator { color: var(--code-terminal-operator) !important; }
+
+.code-theme-terminal .token.function { color: var(--code-terminal-function) !important; }
+.code-theme-terminal .token.method { color: var(--code-terminal-function) !important; }
+.code-theme-terminal .token.builtin { color: var(--code-terminal-function) !important; }
+
+.code-theme-terminal .token.class-name { color: var(--code-terminal-class) !important; }
+.code-theme-terminal .token.type { color: var(--code-terminal-type) !important; }
+.code-theme-terminal .token.interface { color: var(--code-terminal-type) !important; }
+
+.code-theme-terminal .token.variable { color: var(--code-terminal-variable) !important; }
+.code-theme-terminal .token.parameter { color: var(--code-terminal-variable) !important; }
+.code-theme-terminal .token.constant { color: var(--code-terminal-const) !important; }
+
+.code-theme-terminal .token.string { color: var(--code-terminal-string) !important; }
+.code-theme-terminal .token.template-string { color: var(--code-terminal-string) !important; }
+
+.code-theme-terminal .token.number { color: var(--code-terminal-number) !important; }
+.code-theme-terminal .token.boolean { color: var(--code-terminal-boolean) !important; }
+.code-theme-terminal .token.null { color: var(--code-terminal-const) !important; }
+
+.code-theme-terminal .token.comment { color: var(--code-terminal-comment) !important; font-style: italic; }
+.code-theme-terminal .token.prolog { color: var(--code-terminal-comment) !important; font-style: italic; }
+
+.code-theme-terminal .token.property { color: var(--code-terminal-property) !important; }
+.code-theme-terminal .token.attr-name { color: var(--code-terminal-attribute) !important; }
+
+.code-theme-terminal .token.tag { color: var(--code-terminal-tag) !important; }
+.code-theme-terminal .token.tag .token.punctuation { color: var(--code-terminal-operator) !important; }
+
+.code-theme-terminal .token.punctuation { color: var(--code-terminal-punctuation) !important; }
+.code-theme-terminal .token.delimiter { color: var(--code-terminal-punctuation) !important; }
